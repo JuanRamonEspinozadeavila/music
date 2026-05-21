@@ -1,0 +1,208 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { CDO_OPTIONS } from "@/types/cdo";
+
+export default function UploadMediaPage() {
+  const [userId, setUserId] = useState("");
+
+  const [type, setType] = useState<"song" | "podcast">("song");
+  const [title, setTitle] = useState("");
+  const [artist, setArtist] = useState("");
+  const [description, setDescription] = useState("");
+  const [cdo, setCdo] = useState("");
+
+  const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const { data } = await supabase.auth.getUser();
+
+      if (!data.user) {
+        window.location.href = "/login";
+        return;
+      }
+
+      setUserId(data.user.id);
+    };
+
+    loadUser();
+  }, []);
+
+  const handleUpload = async () => {
+    try {
+      if (!userId) {
+        alert("No hay sesión activa");
+        return;
+      }
+
+      if (!title || !type || !audioFile) {
+        alert("Faltan campos obligatorios");
+        return;
+      }
+
+      setLoading(true);
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("artist", artist);
+      formData.append("description", description);
+      formData.append("type", type);
+      formData.append("cdo", cdo);
+      formData.append("createdBy", userId);
+      formData.append("audio", audioFile);
+
+      if (coverFile) {
+        formData.append("cover", coverFile);
+      }
+
+      const response = await fetch("/api/media/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        alert(result.error || "Error al subir archivo");
+        return;
+      }
+
+      alert("Archivo subido correctamente");
+
+      setTitle("");
+      setArtist("");
+      setDescription("");
+      setCdo("");
+      setAudioFile(null);
+      setCoverFile(null);
+    } catch (error) {
+      console.error(error);
+      alert("Error inesperado al subir");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
+      <div
+        className="uk-card brame-card uk-card-body"
+        style={{
+          width: "100%",
+          maxWidth: "720px",
+          margin: "40px",
+        }}
+      >
+        <h1 className="brame-title uk-margin-remove-bottom">
+          Subir contenido
+        </h1>
+
+        <p className="brame-muted uk-margin-small-top">
+          Carga canciones o podcasts para BRAME Music.
+        </p>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">Tipo</label>
+          <select
+            className="uk-select brame-select"
+            value={type}
+            onChange={(e) => setType(e.target.value as "song" | "podcast")}
+          >
+            <option value="song">Canción</option>
+            <option value="podcast">Podcast</option>
+          </select>
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">Título</label>
+          <input
+            className="uk-input brame-input"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Nombre del contenido"
+          />
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">Artista / Autor</label>
+          <input
+            className="uk-input brame-input"
+            value={artist}
+            onChange={(e) => setArtist(e.target.value)}
+            placeholder="Artista, locutor o programa"
+          />
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">Descripción</label>
+          <textarea
+            className="uk-textarea brame-input"
+            rows={4}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Descripción breve"
+            style={{ height: "auto", paddingTop: "14px" }}
+          />
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">CDO / Playlist</label>
+          <select
+            className="uk-select brame-select"
+            value={cdo}
+            onChange={(e) => setCdo(e.target.value)}
+          >
+            <option value="">General</option>
+            {CDO_OPTIONS.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">
+            Archivo de audio
+          </label>
+          <input
+            className="uk-input brame-input"
+            type="file"
+            accept="audio/*"
+            onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+          />
+        </div>
+
+        <div className="uk-margin">
+          <label className="uk-form-label brame-muted">
+            Portada
+          </label>
+          <input
+            className="uk-input brame-input"
+            type="file"
+            accept="image/*"
+            onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
+          />
+        </div>
+
+        <button
+          type="button"
+          className="uk-button brame-button uk-width-1-1"
+          onClick={handleUpload}
+          disabled={loading}
+          style={{
+            height: "54px",
+            marginTop: "20px",
+          }}
+        >
+          {loading ? "Subiendo..." : "Subir contenido"}
+        </button>
+      </div>
+    </main>
+  );
+}
