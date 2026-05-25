@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-
-import "uikit/dist/css/uikit.min.css";
 import "./globals.css";
 
 import { Player } from "@/components/player/Player";
