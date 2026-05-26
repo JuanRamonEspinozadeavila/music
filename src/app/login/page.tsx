@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const ALLOWED_DOMAIN = "@grupobrame.com";
-const ALLOWED_EMAILS = ["idiwjr@gmail.com"];
+const ALLOWED_EMAILS = ["idiwjr@gmail.com,janeth.salas@brvo.mx"];
 
 function isAllowedEmail(email: string) {
   const cleanEmail = email.toLowerCase().trim();
@@ -74,7 +74,7 @@ export default function LoginPage() {
         return;
       }
 
-      alert("Usuario registrado correctamente");
+      alert("Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.");
       setMode("login");
     } catch (err) {
       console.error(err);
