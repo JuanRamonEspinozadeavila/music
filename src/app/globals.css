@@ -1,9 +1,9 @@
 :root {
---brame-green: #ff6c36;
+--brame-green: #ffa91e;
 --brame-green-hover: #ff5a1f;
---brame-orange: #ec4305;
+--brame-orange: #ec6905;
 
-  --brame-bg: #050505;
+  --brame-bg: #050505; 
   --brame-panel: #101010;
   --brame-card: rgba(24, 24, 24, 0.86);
   --brame-card-hover: rgba(34, 34, 34, 0.96);
@@ -1508,4 +1508,34 @@ linear-gradient(180deg, rgba(25, 25, 25, 0.88), rgba(10, 10, 10, 0.94));  border
   .brame-weekly-feature {
     min-height: 180px;
   }
+}
+.brame-weekly-mini {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brame-weekly-mini img {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.brame-weekly-mini strong {
+  display: block;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.brame-weekly-mini span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 11px;
 }

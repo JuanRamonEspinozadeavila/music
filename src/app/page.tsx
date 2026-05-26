@@ -7,12 +7,15 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { SongGrid } from "@/components/playlist/SongGrid";
 import { usePlayerStore } from "@/store/playerStore";
+import { getWeeklyFeatured } from "@/lib/getWeeklyFeatured";
+import { Song } from "@/types/song";
 
 export default function HomePage() {
   const [name, setName] = useState("Usuario");
   const [email, setEmail] = useState("");
   const [cdo, setCdo] = useState("");
   const [loading, setLoading] = useState(true);
+  const [weeklySongs, setWeeklySongs] = useState<Song[]>([]);
 
   const currentSong = usePlayerStore((state) => state.currentSong);
   const isPlaying = usePlayerStore((state) => state.isPlaying);
@@ -40,8 +43,12 @@ export default function HomePage() {
         .eq("id", data.user.id)
         .single();
 
-      setCdo(profile?.cdo || data.user.user_metadata?.cdo || "");
-      setLoading(false);
+     setCdo(profile?.cdo || data.user.user_metadata?.cdo || "");
+
+const featured = await getWeeklyFeatured();
+setWeeklySongs(featured);
+
+setLoading(false);
     };
 
     loadSession();
@@ -144,42 +151,51 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <aside className="brame-weekly-feature">
-                <p className="brame-weekly-kicker">
-                  Música destacada
-                </p>
+             <aside className="brame-weekly-feature">
+  <p className="brame-weekly-kicker">Música destacada</p>
 
-                <h2>De la semana</h2>
+  <h2>De la semana</h2>
 
-                {currentSong ? (
-                  <div className="brame-weekly-current">
-                    <img
-                      src={currentSong.cover}
-                      alt={currentSong.title}
-                      className="brame-weekly-cover"
-                    />
+  {weeklySongs.length > 0 ? (
+    <>
+      <div className="brame-weekly-current">
+        <img
+          src={weeklySongs[0].cover}
+          alt={weeklySongs[0].title}
+          className="brame-weekly-cover"
+        />
 
-                    <div>
-                      <p className="brame-weekly-label">
-                        {isPlaying ? "Sonando ahora" : "Última selección"}
-                      </p>
+        <div>
+          <p className="brame-weekly-label">Selección principal</p>
 
-                      <h3>{currentSong.title}</h3>
+          <h3>{weeklySongs[0].title}</h3>
 
-                      <p>{currentSong.artist}</p>
-                    </div>
-                  </div>
-                ) : (
-                  <p>
-                    Descubre canciones, podcasts y contenidos recomendados para
-                    esta semana.
-                  </p>
-                )}
+          <p>{weeklySongs[0].artist}</p>
+        </div>
+      </div>
 
-                <a href="/search" className="brame-weekly-link">
-                  Explorar selección
-                </a>
-              </aside>
+      {weeklySongs.slice(1).map((song) => (
+        <div key={song.id} className="brame-weekly-mini">
+          <img src={song.cover} alt={song.title} />
+
+          <div>
+            <strong>{song.title}</strong>
+            <span>{song.artist}</span>
+          </div>
+        </div>
+      ))}
+    </>
+  ) : (
+    <p>
+      Todavía no hay música destacada de la semana. Marca canciones desde
+      Supabase.
+    </p>
+  )}
+
+  <a href="/search" className="brame-weekly-link">
+    Explorar selección
+  </a>
+</aside>
             </div>
           </section>
 
