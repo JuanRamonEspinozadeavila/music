@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
+const ALLOWED_DOMAIN = "@grupobrame.com";
+
+function isAllowedEmail(email: string) {
+  return email.toLowerCase().trim().endsWith(ALLOWED_DOMAIN);
+}
+
 export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "register">("login");
 
@@ -12,12 +18,21 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
 
+  const validateEmailDomain = (cleanEmail: string) => {
+    if (!isAllowedEmail(cleanEmail)) {
+      alert("Solo se permiten correos con dominio @grupobrame.com");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleRegister = async () => {
     try {
       setLoading(true);
 
       const cleanName = name.trim();
-      const cleanEmail = email.trim();
+      const cleanEmail = email.trim().toLowerCase();
 
       if (!cleanName) {
         alert("Escribe tu nombre");
@@ -26,6 +41,10 @@ export default function LoginPage() {
 
       if (!cleanEmail) {
         alert("Escribe tu correo");
+        return;
+      }
+
+      if (!validateEmailDomain(cleanEmail)) {
         return;
       }
 
@@ -63,10 +82,14 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      const cleanEmail = email.trim();
+      const cleanEmail = email.trim().toLowerCase();
 
       if (!cleanEmail) {
         alert("Escribe tu correo");
+        return;
+      }
+
+      if (!validateEmailDomain(cleanEmail)) {
         return;
       }
 
@@ -132,7 +155,7 @@ export default function LoginPage() {
             marginBottom: "30px",
           }}
         >
-          Login or create your account
+          Acceso exclusivo para correos @grupobrame.com
         </p>
 
         <div
@@ -203,7 +226,7 @@ export default function LoginPage() {
 
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email @grupobrame.com"
           value={email}
           disabled={loading}
           onChange={(e) => setEmail(e.target.value)}
