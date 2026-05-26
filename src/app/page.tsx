@@ -6,27 +6,12 @@ import { supabase } from "@/lib/supabase";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { SongGrid } from "@/components/playlist/SongGrid";
-import { Player } from "@/components/player/Player";
 
 export default function HomePage() {
   const [name, setName] = useState("Usuario");
   const [email, setEmail] = useState("");
   const [cdo, setCdo] = useState("");
   const [loading, setLoading] = useState(true);
-
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-
-    if (hour >= 5 && hour < 12) {
-      return "Buenos días";
-    }
-
-    if (hour >= 12 && hour < 19) {
-      return "Buenas tardes";
-    }
-
-    return "Buenas noches";
-  };
 
   useEffect(() => {
     const loadSession = async () => {
@@ -52,7 +37,6 @@ export default function HomePage() {
         .single();
 
       setCdo(profile?.cdo || data.user.user_metadata?.cdo || "");
-
       setLoading(false);
     };
 
@@ -68,7 +52,7 @@ export default function HomePage() {
     return (
       <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
         <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando...</p>
+          <p className="brame-muted uk-margin-remove">Cargando experiencia...</p>
         </div>
       </main>
     );
@@ -82,54 +66,74 @@ export default function HomePage() {
         style={{
           flex: 1,
           minHeight: "100vh",
-          paddingBottom: "110px",
+          paddingBottom: "120px",
+          minWidth: 0,
         }}
       >
         <div className="uk-container uk-container-expand uk-padding">
-          <div className="uk-card brame-card uk-card-body uk-margin-medium-bottom">
-            <div
-              className="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap"
-              style={{ gap: "20px" }}
-            >
+          <section className="brame-home-hero uk-margin-medium-bottom">
+            <div className="brame-hero-glow" />
+
+            <div className="brame-hero-content">
               <div>
-                <p className="brame-muted uk-margin-small-bottom">
-                  Bienvenido a BRAME Music
+                <p className="brame-eyebrow uk-margin-small-bottom">
+                  BRAME MUSIC · CURADURÍA INTERNA
                 </p>
 
-                <h1 className="brame-title uk-margin-remove">
-                  {getGreeting()}, {name}
+                <h1 className="brame-hero-title uk-margin-remove">
+                  Música para equipos que se mueven distinto.
                 </h1>
 
-                <p className="brame-muted uk-margin-small-top uk-margin-remove-bottom">
-                  {email}
+                <p className="brame-hero-copy uk-margin-small-top">
+                  Explora canciones, podcasts y contenidos seleccionados para tu CDO.
                 </p>
 
-                {cdo && (
-                  <p className="uk-margin-small-top uk-margin-remove-bottom brame-accent uk-text-bold">
-                    CDO: {cdo}
-                  </p>
-                )}
+                <div className="brame-user-strip">
+                  <span>{name}</span>
+                  <span>{email}</span>
+                  {cdo && <span>CDO: {cdo}</span>}
+                </div>
               </div>
 
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="uk-button brame-button"
-              >
-                Cerrar sesión
-              </button>
+              <div className="brame-hero-actions">
+                <a href="/search" className="brame-pill-button">
+                  Buscar contenido
+                </a>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="brame-ghost-button"
+                >
+                  Cerrar sesión
+                </button>
+              </div>
             </div>
-          </div>
+          </section>
 
           <Header />
 
-          <div className="uk-margin-large-top">
+          <section className="uk-margin-large-top">
+            <div className="brame-section-heading">
+              <div>
+                <p className="brame-eyebrow uk-margin-remove">
+                  NUEVO EN BRAME
+                </p>
+
+                <h2 className="brame-section-title uk-margin-remove">
+                  Selección destacada
+                </h2>
+              </div>
+
+              <a href="/search" className="brame-section-link">
+                Ver todo
+              </a>
+            </div>
+
             <SongGrid />
-          </div>
+          </section>
         </div>
       </section>
-
-    
     </main>
   );
 }

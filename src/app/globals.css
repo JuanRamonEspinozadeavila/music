@@ -601,3 +601,153 @@ textarea {
   opacity: 1;
   color: var(--brame-green);
 }
+.brame-home-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  padding: 44px;
+  min-height: 280px;
+  background:
+    radial-gradient(circle at top right, rgba(29, 185, 84, 0.28), transparent 34%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    #121212;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.brame-hero-glow {
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  right: -100px;
+  top: -120px;
+  background: rgba(29, 185, 84, 0.22);
+  filter: blur(70px);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.brame-hero-content {
+  position: relative;
+  z-index: 1;
+  min-height: 190px;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  align-items: flex-end;
+}
+
+.brame-eyebrow {
+  color: #1db954;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.brame-hero-title {
+  max-width: 780px;
+  color: #fff;
+  font-size: clamp(42px, 6vw, 82px);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+  font-weight: 900;
+}
+
+.brame-hero-copy {
+  max-width: 560px;
+  color: #b8b8b8;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.brame-user-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.brame-user-strip span {
+  color: #d7d7d7;
+  font-size: 13px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brame-hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.brame-pill-button,
+.brame-ghost-button {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brame-pill-button {
+  border: none;
+  background: #1db954;
+  color: #000;
+}
+
+.brame-ghost-button {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.brame-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.brame-section-title {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.brame-section-link {
+  color: #1db954;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .brame-home-hero {
+    padding: 28px;
+  }
+
+  .brame-hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .brame-hero-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .brame-pill-button,
+  .brame-ghost-button {
+    flex: 1;
+  }
+}
