@@ -692,12 +692,12 @@ textarea {
   padding: 14px 18px;
   border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(25, 25, 25, 0.94), rgba(10, 10, 10, 0.96));
-  border: 1px solid rgba(255, 255, 255, 0.09);
+linear-gradient(180deg, rgba(25, 25, 25, 0.88), rgba(10, 10, 10, 0.94));  border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.55),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(22px);
+  backdrop-filter: blur(27px);
+  position: relative;
 }
 
 .brame-player-song {
@@ -973,4 +973,22 @@ textarea {
 
 .brame-main-play.is-playing:hover {
   transform: scale(1.07);
+}
+.brame-player-inner {
+  overflow: hidden;
+}
+
+.brame-player-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at left, rgba(29, 185, 84, 0.12), transparent 32%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent);
+  pointer-events: none;
+}
+
+.brame-player-inner > * {
+  position: relative;
+  z-index: 1;
 }

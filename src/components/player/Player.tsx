@@ -252,7 +252,14 @@ export function Player() {
 
   return (
     <div className="brame-player">
-      <div className="brame-player-inner">
+    <div
+  className="brame-player-inner"
+  style={{
+    backgroundImage: `linear-gradient(90deg, rgba(10,10,10,0.96), rgba(10,10,10,0.88)), url(${currentSong.cover})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
         <div className="brame-player-song">
      <div className={isPlaying ? "brame-cover-glow is-playing" : "brame-cover-glow"}>
   <img
