@@ -4,9 +4,15 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const ALLOWED_DOMAIN = "@grupobrame.com";
+const ALLOWED_EMAILS = ["idiwjr@gmail.com"];
 
 function isAllowedEmail(email: string) {
-  return email.toLowerCase().trim().endsWith(ALLOWED_DOMAIN);
+  const cleanEmail = email.toLowerCase().trim();
+
+  return (
+    cleanEmail.endsWith(ALLOWED_DOMAIN) ||
+    ALLOWED_EMAILS.includes(cleanEmail)
+  );
 }
 
 export default function LoginPage() {
@@ -20,7 +26,7 @@ export default function LoginPage() {
 
   const validateEmailDomain = (cleanEmail: string) => {
     if (!isAllowedEmail(cleanEmail)) {
-      alert("Solo se permiten correos con dominio @grupobrame.com");
+    alert("Solo se permiten correos @grupobrame.com o correos autorizados.");
       return false;
     }
 
