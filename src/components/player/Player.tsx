@@ -296,18 +296,35 @@ export function Player() {
               <Shuffle size={19} strokeWidth={2.4} />
             </button>
 
+<div className={isPlaying ? "brame-mini-wave is-playing" : "brame-mini-wave"}>
+  <span />
+  <span />
+  <span />
+</div>
+
+
+
           <button
   type="button"
   onClick={handleMainPlay}
   className={isPlaying ? "brame-main-play is-playing" : "brame-main-play"}
 >
+
+
+
+
+
               {isPlaying ? (
                 <Pause size={24} fill="currentColor" />
               ) : (
                 <Play size={24} fill="currentColor" style={{ marginLeft: 3 }} />
               )}
             </button>
-
+<div className={isPlaying ? "brame-mini-wave is-playing" : "brame-mini-wave"}>
+  <span />
+  <span />
+  <span />
+</div>
             <button
               type="button"
               onClick={handleNext}
