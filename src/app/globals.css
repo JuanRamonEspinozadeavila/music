@@ -922,3 +922,44 @@ textarea {
     opacity: 1;
   }
 }
+
+.brame-cover-glow {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 18px;
+}
+
+.brame-cover-glow::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 22px;
+  background: rgba(29, 185, 84, 0);
+  filter: blur(14px);
+  opacity: 0;
+  transition: opacity 180ms ease, background 180ms ease;
+}
+
+.brame-cover-glow.is-playing::before {
+  background: rgba(29, 185, 84, 0.42);
+  opacity: 1;
+  animation: brameCoverPulse 1.8s infinite ease-in-out;
+}
+
+.brame-cover-glow .brame-player-cover {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes brameCoverPulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.04);
+  }
+}

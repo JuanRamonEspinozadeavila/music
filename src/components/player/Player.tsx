@@ -254,11 +254,13 @@ export function Player() {
     <div className="brame-player">
       <div className="brame-player-inner">
         <div className="brame-player-song">
-          <img
-            src={currentSong.cover}
-            alt={currentSong.title}
-            className="brame-player-cover"
-          />
+     <div className={isPlaying ? "brame-cover-glow is-playing" : "brame-cover-glow"}>
+  <img
+    src={currentSong.cover}
+    alt={currentSong.title}
+    className="brame-player-cover"
+  />
+</div>
 
           <div style={{ minWidth: 0 }}>
             <p className="brame-player-title">{currentSong.title}</p>
