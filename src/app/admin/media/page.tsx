@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { CDO_OPTIONS } from "@/types/cdo";
+import { isAdmin } from "@/lib/isAdmin";
 
 interface MediaItem {
   id: string;
@@ -19,6 +20,7 @@ export default function AdminMediaPage() {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState("");
+  const [allowed, setAllowed] = useState(false);
 
   const loadItems = async () => {
     const { data, error } = await supabase
@@ -37,8 +39,20 @@ export default function AdminMediaPage() {
   };
 
   useEffect(() => {
-    loadItems();
-  }, []);
+    const checkAccess = async () => {
+    const allowedAdmin = await isAdmin();
+
+    if (!allowedAdmin) {
+      window.location.href = "/";
+      return;
+    }
+
+    setAllowed(true);
+    await loadItems();
+  };
+
+  checkAccess();
+}, []);
 
   const updateItem = (
     id: string,
@@ -102,6 +116,17 @@ export default function AdminMediaPage() {
     setItems((prev) => prev.filter((item) => item.id !== id));
     alert("Contenido eliminado");
   };
+
+
+  if (!allowed) {
+  return (
+    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
+      <div className="uk-card brame-card uk-card-body">
+        <p className="brame-muted uk-margin-remove">Validando permisos...</p>
+      </div>
+    </main>
+  );
+}
 
   if (loading) {
     return (

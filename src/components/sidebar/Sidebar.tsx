@@ -1,21 +1,43 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { CDO_OPTIONS } from "@/types/cdo";
 import { LiveRadioPlayer } from "./LiveRadioPlayer";
+import { SponsorEventCard } from "./SponsorEventCard";
+import { isAdmin } from "@/lib/isAdmin";
 
-const menuItems = [
+const publicMenuItems = [
   { label: "Inicio", href: "/", icon: "⌂" },
   { label: "Buscar", href: "/search", icon: "⌕" },
   { label: "Tu biblioteca", href: "/library", icon: "▣" },
   { label: "Favoritos", href: "/favorites", icon: "♡" },
+  { label: "Eventos", href: "/events", icon: "◉" },
+];
+
+const adminMenuItems = [
   { label: "Subir contenido", href: "/admin/upload", icon: "＋" },
   { label: "Administrar", href: "/admin/media", icon: "✎" },
+  { label: "Admin eventos", href: "/admin/events", icon: "✦" },
 ];
 
 export function Sidebar() {
   const router = useRouter();
+  const [allowedAdmin, setAllowedAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAccess = async () => {
+      const allowed = await isAdmin();
+      setAllowedAdmin(allowed);
+    };
+
+    checkAccess();
+  }, []);
+
+  const menuItems = allowedAdmin
+    ? [...publicMenuItems, ...adminMenuItems]
+    : publicMenuItems;
 
   const handleCdoChange = (value: string) => {
     if (!value) return;
@@ -55,6 +77,7 @@ export function Sidebar() {
         </nav>
 
         <LiveRadioPlayer />
+        <SponsorEventCard />
 
         <div className="brame-cdo-card">
           <p className="brame-cdo-title">Playlists CDO</p>

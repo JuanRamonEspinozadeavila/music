@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { CDO_OPTIONS } from "@/types/cdo";
+import { isAdmin } from "@/lib/isAdmin";
 
 export default function UploadMediaPage() {
   const [userId, setUserId] = useState("");
@@ -17,21 +18,22 @@ export default function UploadMediaPage() {
   const [coverFile, setCoverFile] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
+  const [allowed, setAllowed] = useState(false);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      const { data } = await supabase.auth.getUser();
+ useEffect(() => {
+  const checkAccess = async () => {
+    const allowedAdmin = await isAdmin();
 
-      if (!data.user) {
-        window.location.href = "/login";
-        return;
-      }
+    if (!allowedAdmin) {
+      window.location.href = "/";
+      return;
+    }
 
-      setUserId(data.user.id);
-    };
+    setAllowed(true);
+  };
 
-    loadUser();
-  }, []);
+  checkAccess();
+}, []);
 
   const handleUpload = async () => {
     try {
@@ -87,6 +89,16 @@ export default function UploadMediaPage() {
       setLoading(false);
     }
   };
+
+  if (!allowed) {
+  return (
+    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
+      <div className="uk-card brame-card uk-card-body">
+        <p className="brame-muted uk-margin-remove">Validando permisos...</p>
+      </div>
+    </main>
+  );
+}
 
   return (
     <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
