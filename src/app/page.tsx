@@ -6,12 +6,16 @@ import { supabase } from "@/lib/supabase";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { SongGrid } from "@/components/playlist/SongGrid";
+import { usePlayerStore } from "@/store/playerStore";
 
 export default function HomePage() {
   const [name, setName] = useState("Usuario");
   const [email, setEmail] = useState("");
   const [cdo, setCdo] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const currentSong = usePlayerStore((state) => state.currentSong);
+  const isPlaying = usePlayerStore((state) => state.isPlaying);
 
   useEffect(() => {
     const loadSession = async () => {
@@ -52,7 +56,9 @@ export default function HomePage() {
     return (
       <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
         <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando experiencia...</p>
+          <p className="brame-muted uk-margin-remove">
+            Cargando experiencia...
+          </p>
         </div>
       </main>
     );
@@ -71,49 +77,102 @@ export default function HomePage() {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding">
-          <section className="brame-home-hero uk-margin-medium-bottom">
+          <section
+            className="brame-home-hero uk-margin-medium-bottom"
+            style={{
+              backgroundImage: currentSong
+                ? `linear-gradient(90deg, rgba(18,18,18,0.96) 0%, rgba(18,18,18,0.82) 48%, rgba(18,18,18,0.45) 100%), url(${currentSong.cover})`
+                : undefined,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
             <div className="brame-hero-glow" />
 
             <div className="brame-hero-content">
               <div>
                 <p className="brame-eyebrow uk-margin-small-bottom">
-                  BRAME MUSIC · CURADURÍA INTERNA
+                  {currentSong
+                    ? isPlaying
+                      ? "REPRODUCIENDO AHORA"
+                      : "LISTO PARA ESCUCHAR"
+                    : "BRAME MUSIC · CURADURÍA INTERNA"}
                 </p>
 
                 <h1 className="brame-hero-title uk-margin-remove">
-                  Música para equipos que se mueven distinto.
+                  {currentSong
+                    ? currentSong.title
+                    : "Música para equipos que se mueven distinto."}
                 </h1>
 
                 <p className="brame-hero-copy uk-margin-small-top">
-                  Explora canciones, podcasts y contenidos seleccionados para tu CDO.
+                  {currentSong
+                    ? `${currentSong.artist} · ${
+                        currentSong.cdo || "BRAME Music"
+                      }`
+                    : "Explora canciones, podcasts y contenidos seleccionados para tu CDO."}
                 </p>
 
                 <div className="brame-user-strip">
-                  <span>{name}</span>
-                  <span>{email}</span>
-                  {cdo && <span>CDO: {cdo}</span>}
+                  {currentSong ? (
+                    <>
+                      <span>{currentSong.type || "Contenido"}</span>
+                      {currentSong.cdo && <span>CDO: {currentSong.cdo}</span>}
+                      <span>{isPlaying ? "En reproducción" : "Pausado"}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{name}</span>
+                      <span>{email}</span>
+                      {cdo && <span>CDO: {cdo}</span>}
+                    </>
+                  )}
                 </div>
               </div>
 
-              <div className="brame-hero-actions">
-                <a href="/search" className="brame-pill-button">
-                  Buscar contenido
-                </a>
+              <div className="brame-hero-now-card">
+                {currentSong ? (
+                  <>
+                    <img
+                      src={currentSong.cover}
+                      alt={currentSong.title}
+                      className="brame-hero-cover"
+                    />
 
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="brame-ghost-button"
-                >
-                  Cerrar sesión
-                </button>
+                    <div>
+                      <p className="brame-muted uk-margin-small-bottom">
+                        Sonando en BRAME
+                      </p>
+
+                      <h3 className="uk-margin-remove">{currentSong.title}</h3>
+
+                      <p className="brame-muted uk-margin-small-top uk-margin-remove-bottom">
+                        {currentSong.artist}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="brame-hero-actions">
+                    <a href="/search" className="brame-pill-button">
+                      Buscar contenido
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="brame-ghost-button"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </section>
 
           <Header />
 
-          <section className="uk-margin-large-top">
+          <section className="uk-margin-small-top">
             <div className="brame-section-heading">
               <div>
                 <p className="brame-eyebrow uk-margin-remove">
