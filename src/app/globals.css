@@ -1088,3 +1088,15 @@ linear-gradient(180deg, rgba(25, 25, 25, 0.88), rgba(10, 10, 10, 0.94));  border
     opacity: 1;
   }
 }
+.brame-live-play.is-playing {
+  background: #fff;
+  color: #000;
+  box-shadow:
+    0 0 0 7px rgba(29, 185, 84, 0.1),
+    0 18px 42px rgba(29, 185, 84, 0.34);
+}
+
+.brame-live-play.is-playing:hover {
+  background: #fff;
+  transform: translateY(-1px) scale(1.01);
+}

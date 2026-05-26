@@ -93,7 +93,11 @@ export function LiveRadioPlayer() {
         <strong>Radio Brame</strong>
       </div>
 
-      <button type="button" onClick={togglePlay} className="brame-live-play">
+   <button
+  type="button"
+  onClick={togglePlay}
+  className={playing ? "brame-live-play is-playing" : "brame-live-play"}
+>
         {playing ? (
           <>
             <Pause size={18} fill="currentColor" />
