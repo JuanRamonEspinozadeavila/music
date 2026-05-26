@@ -262,7 +262,18 @@ export function Player() {
 
           <div style={{ minWidth: 0 }}>
             <p className="brame-player-title">{currentSong.title}</p>
-            <p className="brame-player-artist">{currentSong.artist}</p>
+           <div className="brame-player-meta">
+  <p className="brame-player-artist">{currentSong.artist}</p>
+
+  {isPlaying && (
+    <div className="brame-equalizer" aria-label="Reproduciendo">
+      <span />
+      <span />
+      <span />
+      <span />
+    </div>
+  )}
+</div>
           </div>
         </div>
 
