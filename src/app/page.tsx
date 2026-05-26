@@ -89,8 +89,8 @@ export default function HomePage() {
           >
             <div className="brame-hero-glow" />
 
-            <div className="brame-hero-content">
-              <div>
+            <div className="brame-hero-layout">
+              <div className="brame-hero-left">
                 <p className="brame-eyebrow uk-margin-small-bottom">
                   {currentSong
                     ? isPlaying
@@ -128,45 +128,58 @@ export default function HomePage() {
                     </>
                   )}
                 </div>
+
+                <div className="brame-hero-actions brame-hero-actions-bottom">
+                  <a href="/search" className="brame-pill-button">
+                    Buscar contenido
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="brame-ghost-button"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
               </div>
 
-              <div className="brame-hero-now-card">
+              <aside className="brame-weekly-feature">
+                <p className="brame-weekly-kicker">
+                  Música destacada
+                </p>
+
+                <h2>De la semana</h2>
+
                 {currentSong ? (
-                  <>
+                  <div className="brame-weekly-current">
                     <img
                       src={currentSong.cover}
                       alt={currentSong.title}
-                      className="brame-hero-cover"
+                      className="brame-weekly-cover"
                     />
 
                     <div>
-                      <p className="brame-muted uk-margin-small-bottom">
-                        Sonando en BRAME
+                      <p className="brame-weekly-label">
+                        {isPlaying ? "Sonando ahora" : "Última selección"}
                       </p>
 
-                      <h3 className="uk-margin-remove">{currentSong.title}</h3>
+                      <h3>{currentSong.title}</h3>
 
-                      <p className="brame-muted uk-margin-small-top uk-margin-remove-bottom">
-                        {currentSong.artist}
-                      </p>
+                      <p>{currentSong.artist}</p>
                     </div>
-                  </>
-                ) : (
-                  <div className="brame-hero-actions">
-                    <a href="/search" className="brame-pill-button">
-                      Buscar contenido
-                    </a>
-
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="brame-ghost-button"
-                    >
-                      Cerrar sesión
-                    </button>
                   </div>
+                ) : (
+                  <p>
+                    Descubre canciones, podcasts y contenidos recomendados para
+                    esta semana.
+                  </p>
                 )}
-              </div>
+
+                <a href="/search" className="brame-weekly-link">
+                  Explorar selección
+                </a>
+              </aside>
             </div>
           </section>
 

@@ -1,5 +1,5 @@
 :root {
---brame-green: #ec4305;
+--brame-green: #ff6c36;
 --brame-green-hover: #ff5a1f;
 --brame-orange: #ec4305;
 
@@ -1421,4 +1421,91 @@ linear-gradient(180deg, rgba(25, 25, 25, 0.88), rgba(10, 10, 10, 0.94));  border
 .brame-sponsor-dots button.is-active {
   width: 18px;
   background: var(--brame-orange);
+}
+.brame-hero-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.brame-hero-left {
+  min-width: 0;
+}
+
+.brame-hero-actions-bottom {
+  margin-top: 24px;
+  justify-content: flex-start;
+}
+
+.brame-weekly-feature {
+  position: relative;
+  overflow: hidden;
+  padding: 22px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 77, 0, 0.24), transparent 38%),
+    rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 220px;
+}
+
+.brame-weekly-kicker {
+  margin: 0 0 8px;
+  color: var(--brame-orange);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.brame-weekly-feature h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.brame-weekly-feature p {
+  margin: 10px 0 16px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.brame-weekly-link {
+  display: inline-flex;
+  width: fit-content;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 77, 0, 0.16);
+  color: #ff7a3d;
+  font-size: 12px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.brame-weekly-link:hover {
+  background: rgba(255, 77, 0, 0.25);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .brame-hero-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .brame-weekly-feature {
+    min-height: 180px;
+  }
 }
