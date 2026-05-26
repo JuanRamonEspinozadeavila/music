@@ -289,11 +289,11 @@ export function Player() {
               <Shuffle size={19} strokeWidth={2.4} />
             </button>
 
-            <button
-              type="button"
-              onClick={handleMainPlay}
-              className="brame-main-play"
-            >
+          <button
+  type="button"
+  onClick={handleMainPlay}
+  className={isPlaying ? "brame-main-play is-playing" : "brame-main-play"}
+>
               {isPlaying ? (
                 <Pause size={24} fill="currentColor" />
               ) : (

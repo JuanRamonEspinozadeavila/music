@@ -963,3 +963,14 @@ textarea {
     transform: scale(1.04);
   }
 }
+.brame-main-play.is-playing {
+  background: #fff;
+  color: #000;
+  box-shadow:
+    0 0 0 8px rgba(29, 185, 84, 0.1),
+    0 18px 45px rgba(29, 185, 84, 0.38);
+}
+
+.brame-main-play.is-playing:hover {
+  transform: scale(1.07);
+}
