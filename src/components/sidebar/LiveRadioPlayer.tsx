@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pause, Play, Radio, Volume2, VolumeX } from "lucide-react";
 
 const STREAM_URL =
@@ -13,17 +13,38 @@ export function LiveRadioPlayer() {
   const [volume, setVolume] = useState(0.8);
   const [muted, setMuted] = useState(false);
 
+  const stopRadio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.pause();
+    audio.removeAttribute("src");
+    audio.load();
+    setPlaying(false);
+  };
+
+  useEffect(() => {
+    const handlePauseRadio = () => {
+      stopRadio();
+    };
+
+    window.addEventListener("brame:pause-radio-player", handlePauseRadio);
+
+    return () => {
+      window.removeEventListener("brame:pause-radio-player", handlePauseRadio);
+    };
+  }, []);
+
   const togglePlay = async () => {
     const audio = audioRef.current;
     if (!audio) return;
 
     if (playing) {
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
-      setPlaying(false);
+      stopRadio();
       return;
     }
+
+    window.dispatchEvent(new Event("brame:pause-main-player"));
 
     audio.src = STREAM_URL;
     audio.volume = muted ? 0 : volume;
@@ -72,31 +93,23 @@ export function LiveRadioPlayer() {
         <strong>Radio Brame</strong>
       </div>
 
-      <button
-        type="button"
-        onClick={togglePlay}
-        className="brame-live-play"
-      >
+      <button type="button" onClick={togglePlay} className="brame-live-play">
         {playing ? (
           <>
             <Pause size={18} fill="currentColor" />
-            Pausar  
+            Pausar
           </>
         ) : (
           <>
             <Play size={18} fill="currentColor" />
-            Escuchar 
+            Escuchar
           </>
         )}
       </button>
 
       <div className="brame-live-volume">
         <button type="button" onClick={toggleMute}>
-          {muted || volume === 0 ? (
-            <VolumeX size={16} />
-          ) : (
-            <Volume2 size={16} />
-          )}
+          {muted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
         </button>
 
         <input

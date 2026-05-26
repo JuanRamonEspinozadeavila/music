@@ -17,8 +17,14 @@ import { usePlayerStore } from "@/store/playerStore";
 export function Player() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const { currentSong, isPlaying, togglePlay, playNext, playRandom } =
-    usePlayerStore();
+  const {
+    currentSong,
+    isPlaying,
+    togglePlay,
+    playNext,
+    playRandom,
+    setIsPlaying,
+  } = usePlayerStore();
 
   const [userId, setUserId] = useState("");
   const [currentTime, setCurrentTime] = useState(0);
@@ -42,6 +48,19 @@ export function Player() {
   }, []);
 
   useEffect(() => {
+    const pauseMainPlayer = () => {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+    };
+
+    window.addEventListener("brame:pause-main-player", pauseMainPlayer);
+
+    return () => {
+      window.removeEventListener("brame:pause-main-player", pauseMainPlayer);
+    };
+  }, [setIsPlaying]);
+
+  useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
@@ -54,13 +73,16 @@ export function Player() {
     if (!audio || !currentSong) return;
 
     if (isPlaying) {
+      window.dispatchEvent(new Event("brame:pause-radio-player"));
+
       audio.play().catch((error) => {
         console.error("Audio play error:", error);
+        setIsPlaying(false);
       });
     } else {
       audio.pause();
     }
-  }, [isPlaying, currentSong]);
+  }, [isPlaying, currentSong, setIsPlaying]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -108,7 +130,17 @@ export function Player() {
     setLiked(result.liked);
   };
 
+  const handleMainPlay = () => {
+    if (!isPlaying) {
+      window.dispatchEvent(new Event("brame:pause-radio-player"));
+    }
+
+    togglePlay();
+  };
+
   const handleNext = () => {
+    window.dispatchEvent(new Event("brame:pause-radio-player"));
+
     if (shuffle) {
       playRandom();
       return;
@@ -211,6 +243,11 @@ export function Player() {
     justifyContent: "center",
   });
 
+  useEffect(() => {
+  setCurrentTime(0);
+  setDuration(0);
+}, [currentSong?.id]);
+
   if (!currentSong) return null;
 
   return (
@@ -241,7 +278,7 @@ export function Player() {
 
             <button
               type="button"
-              onClick={togglePlay}
+              onClick={handleMainPlay}
               className="brame-main-play"
             >
               {isPlaying ? (

@@ -10,6 +10,7 @@ interface PlayerStore {
 
   setQueue: (songs: Song[]) => void;
   setSong: (song: Song) => void;
+  setIsPlaying: (value: boolean) => void;
 
   playNext: () => void;
   playRandom: () => void;
@@ -31,6 +32,11 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     set({
       currentSong: song,
       isPlaying: true,
+    }),
+
+  setIsPlaying: (value) =>
+    set({
+      isPlaying: value,
     }),
 
   playNext: () => {
@@ -63,9 +69,8 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
       : queue;
 
     const randomSong =
-      availableSongs[
-        Math.floor(Math.random() * availableSongs.length)
-      ] || queue[0];
+      availableSongs[Math.floor(Math.random() * availableSongs.length)] ||
+      queue[0];
 
     set({
       currentSong: randomSong,
