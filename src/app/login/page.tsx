@@ -4,7 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 const ALLOWED_DOMAIN = "@grupobrame.com";
-const ALLOWED_EMAILS = ["idiwjr@gmail.com,janeth.salas@brvo.mx"];
+const ALLOWED_EMAILS = ["idiwjr@gmail.com","janeth.salas@brvo.mx"];
 
 function isAllowedEmail(email: string) {
   const cleanEmail = email.toLowerCase().trim();
