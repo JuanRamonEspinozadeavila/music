@@ -39,7 +39,7 @@ export default function SearchPage() {
   }, [songs, search]);
 
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -51,25 +51,26 @@ export default function SearchPage() {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding">
-          <div className="uk-card brame-card uk-card-body uk-margin-medium-bottom">
-            <p className="brame-muted uk-margin-small-bottom">
+          <div className="uk-card conexionrock-card uk-card-body uk-margin-medium-bottom">
+            <p className="conexionrock-muted uk-margin-small-bottom">
               EXPLORAR
             </p>
 
-            <h1 className="brame-title uk-margin-remove">
+            <h1 className="conexionrock-title uk-margin-remove">
               Encuentra canciones, podcasts y playlists.
             </h1>
 
-            <p className="brame-muted uk-margin-small-top uk-margin-remove-bottom">
+            <p className="conexionrock-muted uk-margin-small-top uk-margin-remove-bottom">
               Busca por título, artista, CDO, descripción o tipo de contenido.
             </p>
           </div>
 
           <div className=" uk-margin-medium-bottom">
-            <input style={{ borderRadius: "50px" }}
-              className="el-input uk-input  brame-search-input"
+            <input
+              style={{ borderRadius: "50px" }}
+              className="el-input uk-input  conexionrock-search-input"
               type="search"
-              placeholder="Buscar en BRAME Music..."
+              placeholder="Buscar en conexionrock Music..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               autoFocus
@@ -77,16 +78,16 @@ export default function SearchPage() {
           </div>
 
           {loading ? (
-            <p className="brame-muted">Cargando contenido...</p>
+            <p className="conexionrock-muted">Cargando contenido...</p>
           ) : filteredSongs.length > 0 ? (
             <SongGrid songs={filteredSongs} />
           ) : (
-            <div className="uk-card brame-card uk-card-body">
+            <div className="uk-card conexionrock-card uk-card-body">
               <h3 className="uk-margin-remove-bottom">
                 No encontramos resultados
               </h3>
 
-              <p className="brame-muted uk-margin-small-top">
+              <p className="conexionrock-muted uk-margin-small-top">
                 Intenta buscar por artista, canción, podcast o CDO.
               </p>
             </div>

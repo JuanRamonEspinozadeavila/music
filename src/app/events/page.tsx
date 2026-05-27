@@ -39,7 +39,7 @@ export default function EventsPage() {
   }, []);
 
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -51,44 +51,46 @@ export default function EventsPage() {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding">
-          <section className="brame-events-hero">
-            <p className="brame-eyebrow uk-margin-small-bottom">
-              BRAME MUSIC
+          <section className="conexionrock-events-hero">
+            <p className="conexionrock-eyebrow uk-margin-small-bottom">
+              conexionrock MUSIC
             </p>
 
-            <h1 className="brame-events-title uk-margin-remove">
+            <h1 className="conexionrock-events-title uk-margin-remove">
               Eventos y patrocinadores
             </h1>
 
-            <p className="brame-muted uk-margin-small-top">
+            <p className="conexionrock-muted uk-margin-small-top">
               Espacio para campañas, eventos internos, lanzamientos y aliados.
             </p>
           </section>
 
           {loading ? (
-            <p className="brame-muted uk-margin-large-top">Cargando...</p>
+            <p className="conexionrock-muted uk-margin-large-top">
+              Cargando...
+            </p>
           ) : items.length === 0 ? (
-            <p className="brame-muted uk-margin-large-top">
+            <p className="conexionrock-muted uk-margin-large-top">
               No hay eventos activos por ahora.
             </p>
           ) : (
-            <section className="brame-events-grid uk-margin-large-top">
+            <section className="conexionrock-events-grid uk-margin-large-top">
               {items.map((item) => (
-                <article key={item.id} className="brame-event-card">
+                <article key={item.id} className="conexionrock-event-card">
                   {item.image_url ? (
                     <img
                       src={item.image_url}
                       alt={item.title}
-                      className="brame-event-image"
+                      className="conexionrock-event-image"
                     />
                   ) : (
-                    <div className="brame-event-placeholder">
+                    <div className="conexionrock-event-placeholder">
                       {item.label || "Evento"}
                     </div>
                   )}
 
-                  <div className="brame-event-body">
-                    <p className="brame-event-label">
+                  <div className="conexionrock-event-body">
+                    <p className="conexionrock-event-label">
                       {item.label || "Patrocinador / Evento"}
                     </p>
 
@@ -102,7 +104,7 @@ export default function EventsPage() {
                         target={
                           item.link_url.startsWith("http") ? "_blank" : "_self"
                         }
-                        className="brame-event-link"
+                        className="conexionrock-event-link"
                       >
                         Ver más
                       </a>

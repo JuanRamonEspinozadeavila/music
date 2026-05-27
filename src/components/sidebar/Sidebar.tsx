@@ -45,30 +45,30 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="brame-sidebar uk-visible@m">
-      <div className="brame-sidebar-inner">
-        <Link href="/" className="brame-brand-card">
+    <aside className="conexionrock-sidebar uk-visible@m">
+      <div className="conexionrock-sidebar-inner">
+        <Link href="/" className="conexionrock-brand-card">
           <img
             src="/logo_radio.png"
-            alt="Logo RadioBRAME"
-            className="brame-brand-logo"
+            alt="Logo Radioconexionrock"
+            className="conexionrock-brand-logo"
           />
 
           <div>
-            <p className="brame-brand-kicker">Streaming</p>
+            <p className="conexionrock-brand-kicker">Streaming</p>
 
-            <h1 className="brame-brand-title">
-              BRAME <span>Music</span>
+            <h1 className="conexionrock-brand-title">
+              conexionrock <span>Music</span>
             </h1>
           </div>
         </Link>
 
-        <nav className="brame-sidebar-nav">
+        <nav className="conexionrock-sidebar-nav">
           <ul className="uk-nav uk-nav-default">
             {menuItems.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="brame-sidebar-link">
-                  <span className="brame-sidebar-icon">{item.icon}</span>
+                <Link href={item.href} className="conexionrock-sidebar-link">
+                  <span className="conexionrock-sidebar-icon">{item.icon}</span>
                   <span>{item.label}</span>
                 </Link>
               </li>
@@ -79,11 +79,11 @@ export function Sidebar() {
         <LiveRadioPlayer />
         <SponsorEventCard />
 
-        <div className="brame-cdo-card">
-          <p className="brame-cdo-title">Playlists CDO</p>
+        <div className="conexionrock-cdo-card">
+          <p className="conexionrock-cdo-title">Playlists CDO</p>
 
           <select
-            className="uk-select brame-select"
+            className="uk-select conexionrock-select"
             aria-label="CDO"
             defaultValue=""
             onChange={(e) => handleCdoChange(e.target.value)}

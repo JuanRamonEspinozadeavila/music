@@ -20,20 +20,20 @@ export default function UploadMediaPage() {
   const [loading, setLoading] = useState(false);
   const [allowed, setAllowed] = useState(false);
 
- useEffect(() => {
-  const checkAccess = async () => {
-    const allowedAdmin = await isAdmin();
+  useEffect(() => {
+    const checkAccess = async () => {
+      const allowedAdmin = await isAdmin();
 
-    if (!allowedAdmin) {
-      window.location.href = "/";
-      return;
-    }
+      if (!allowedAdmin) {
+        window.location.href = "/";
+        return;
+      }
 
-    setAllowed(true);
-  };
+      setAllowed(true);
+    };
 
-  checkAccess();
-}, []);
+    checkAccess();
+  }, []);
 
   const handleUpload = async () => {
     try {
@@ -91,37 +91,39 @@ export default function UploadMediaPage() {
   };
 
   if (!allowed) {
-  return (
-    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-      <div className="uk-card brame-card uk-card-body">
-        <p className="brame-muted uk-margin-remove">Validando permisos...</p>
-      </div>
-    </main>
-  );
-}
+    return (
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Validando permisos...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
+    <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
       <div
-        className="uk-card brame-card uk-card-body"
+        className="uk-card conexionrock-card uk-card-body"
         style={{
           width: "100%",
           maxWidth: "720px",
           margin: "40px",
         }}
       >
-        <h1 className="brame-title uk-margin-remove-bottom">
+        <h1 className="conexionrock-title uk-margin-remove-bottom">
           Subir contenido
         </h1>
 
-        <p className="brame-muted uk-margin-small-top">
-          Carga canciones o podcasts para BRAME Music.
+        <p className="conexionrock-muted uk-margin-small-top">
+          Carga canciones o podcasts para conexionrock Music.
         </p>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">Tipo</label>
+          <label className="uk-form-label conexionrock-muted">Tipo</label>
           <select
-            className="uk-select brame-select"
+            className="uk-select conexionrock-select"
             value={type}
             onChange={(e) => setType(e.target.value as "song" | "podcast")}
           >
@@ -131,9 +133,9 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">Título</label>
+          <label className="uk-form-label conexionrock-muted">Título</label>
           <input
-            className="uk-input brame-input"
+            className="uk-input conexionrock-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Nombre del contenido"
@@ -141,9 +143,11 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">Artista / Autor</label>
+          <label className="uk-form-label conexionrock-muted">
+            Artista / Autor
+          </label>
           <input
-            className="uk-input brame-input"
+            className="uk-input conexionrock-input"
             value={artist}
             onChange={(e) => setArtist(e.target.value)}
             placeholder="Artista, locutor o programa"
@@ -151,9 +155,11 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">Descripción</label>
+          <label className="uk-form-label conexionrock-muted">
+            Descripción
+          </label>
           <textarea
-            className="uk-textarea brame-input"
+            className="uk-textarea conexionrock-input"
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -163,9 +169,11 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">CDO / Playlist</label>
+          <label className="uk-form-label conexionrock-muted">
+            CDO / Playlist
+          </label>
           <select
-            className="uk-select brame-select"
+            className="uk-select conexionrock-select"
             value={cdo}
             onChange={(e) => setCdo(e.target.value)}
           >
@@ -179,11 +187,11 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">
+          <label className="uk-form-label conexionrock-muted">
             Archivo de audio
           </label>
           <input
-            className="uk-input brame-input"
+            className="uk-input conexionrock-input"
             type="file"
             accept="audio/*"
             onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
@@ -191,11 +199,9 @@ export default function UploadMediaPage() {
         </div>
 
         <div className="uk-margin">
-          <label className="uk-form-label brame-muted">
-            Portada
-          </label>
+          <label className="uk-form-label conexionrock-muted">Portada</label>
           <input
-            className="uk-input brame-input"
+            className="uk-input conexionrock-input"
             type="file"
             accept="image/*"
             onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
@@ -204,7 +210,7 @@ export default function UploadMediaPage() {
 
         <button
           type="button"
-          className="uk-button brame-button uk-width-1-1"
+          className="uk-button conexionrock-button uk-width-1-1"
           onClick={handleUpload}
           disabled={loading}
           style={{

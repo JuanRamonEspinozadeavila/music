@@ -53,10 +53,13 @@ export function Player() {
       setIsPlaying(false);
     };
 
-    window.addEventListener("brame:pause-main-player", pauseMainPlayer);
+    window.addEventListener("conexionrock:pause-main-player", pauseMainPlayer);
 
     return () => {
-      window.removeEventListener("brame:pause-main-player", pauseMainPlayer);
+      window.removeEventListener(
+        "conexionrock:pause-main-player",
+        pauseMainPlayer,
+      );
     };
   }, [setIsPlaying]);
 
@@ -73,7 +76,7 @@ export function Player() {
     if (!audio || !currentSong) return;
 
     if (isPlaying) {
-      window.dispatchEvent(new Event("brame:pause-radio-player"));
+      window.dispatchEvent(new Event("conexionrock:pause-radio-player"));
 
       audio.play().catch((error) => {
         console.error("Audio play error:", error);
@@ -132,14 +135,14 @@ export function Player() {
 
   const handleMainPlay = () => {
     if (!isPlaying) {
-      window.dispatchEvent(new Event("brame:pause-radio-player"));
+      window.dispatchEvent(new Event("conexionrock:pause-radio-player"));
     }
 
     togglePlay();
   };
 
   const handleNext = () => {
-    window.dispatchEvent(new Event("brame:pause-radio-player"));
+    window.dispatchEvent(new Event("conexionrock:pause-radio-player"));
 
     if (shuffle) {
       playRandom();
@@ -244,50 +247,59 @@ export function Player() {
   });
 
   useEffect(() => {
-  setCurrentTime(0);
-  setDuration(0);
-}, [currentSong?.id]);
+    setCurrentTime(0);
+    setDuration(0);
+  }, [currentSong?.id]);
 
   if (!currentSong) return null;
 
   return (
-    <div className="brame-player">
-    <div
-  className="brame-player-inner"
-  style={{
-    backgroundImage: `linear-gradient(90deg, rgba(10,10,10,0.96), rgba(10,10,10,0.88)), url(${currentSong.cover})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-        <div className="brame-player-song">
-     <div className={isPlaying ? "brame-cover-glow is-playing" : "brame-cover-glow"}>
-  <img
-    src={currentSong.cover}
-    alt={currentSong.title}
-    className="brame-player-cover"
-  />
-</div>
+    <div className="conexionrock-player">
+      <div
+        className="conexionrock-player-inner"
+        style={{
+          backgroundImage: `linear-gradient(90deg, rgba(10,10,10,0.96), rgba(10,10,10,0.88)), url(${currentSong.cover})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="conexionrock-player-song">
+          <div
+            className={
+              isPlaying
+                ? "conexionrock-cover-glow is-playing"
+                : "conexionrock-cover-glow"
+            }
+          >
+            <img
+              src={currentSong.cover}
+              alt={currentSong.title}
+              className="conexionrock-player-cover"
+            />
+          </div>
 
           <div style={{ minWidth: 0 }}>
-            <p className="brame-player-title">{currentSong.title}</p>
-           <div className="brame-player-meta">
-  <p className="brame-player-artist">{currentSong.artist}</p>
+            <p className="conexionrock-player-title">{currentSong.title}</p>
+            <div className="conexionrock-player-meta">
+              <p className="conexionrock-player-artist">{currentSong.artist}</p>
 
-  {isPlaying && (
-    <div className="brame-equalizer" aria-label="Reproduciendo">
-      <span />
-      <span />
-      <span />
-      <span />
-    </div>
-  )}
-</div>
+              {isPlaying && (
+                <div
+                  className="conexionrock-equalizer"
+                  aria-label="Reproduciendo"
+                >
+                  <span />
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="brame-player-center">
-          <div className="brame-player-controls">
+        <div className="conexionrock-player-center">
+          <div className="conexionrock-player-controls">
             <button
               type="button"
               onClick={() => setShuffle(!shuffle)}
@@ -296,35 +308,44 @@ export function Player() {
               <Shuffle size={19} strokeWidth={2.4} />
             </button>
 
-<div className={isPlaying ? "brame-mini-wave is-playing" : "brame-mini-wave"}>
-  <span />
-  <span />
-  <span />
-</div>
+            <div
+              className={
+                isPlaying
+                  ? "conexionrock-mini-wave is-playing"
+                  : "conexionrock-mini-wave"
+              }
+            >
+              <span />
+              <span />
+              <span />
+            </div>
 
-
-
-          <button
-  type="button"
-  onClick={handleMainPlay}
-  className={isPlaying ? "brame-main-play is-playing" : "brame-main-play"}
->
-
-
-
-
-
+            <button
+              type="button"
+              onClick={handleMainPlay}
+              className={
+                isPlaying
+                  ? "conexionrock-main-play is-playing"
+                  : "conexionrock-main-play"
+              }
+            >
               {isPlaying ? (
                 <Pause size={24} fill="currentColor" />
               ) : (
                 <Play size={24} fill="currentColor" style={{ marginLeft: 3 }} />
               )}
             </button>
-<div className={isPlaying ? "brame-mini-wave is-playing" : "brame-mini-wave"}>
-  <span />
-  <span />
-  <span />
-</div>
+            <div
+              className={
+                isPlaying
+                  ? "conexionrock-mini-wave is-playing"
+                  : "conexionrock-mini-wave"
+              }
+            >
+              <span />
+              <span />
+              <span />
+            </div>
             <button
               type="button"
               onClick={handleNext}
@@ -354,11 +375,11 @@ export function Player() {
             </button>
           </div>
 
-          <div className="brame-progress-row">
+          <div className="conexionrock-progress-row">
             <span>{formatTime(currentTime)}</span>
 
             <input
-              className="brame-range"
+              className="conexionrock-range"
               type="range"
               min={0}
               max={duration || 0}
@@ -371,7 +392,7 @@ export function Player() {
           </div>
         </div>
 
-        <div className="brame-volume uk-visible@m">
+        <div className="conexionrock-volume uk-visible@m">
           <button
             type="button"
             onClick={toggleMute}
@@ -385,7 +406,7 @@ export function Player() {
           </button>
 
           <input
-            className="brame-range"
+            className="conexionrock-range"
             type="range"
             min={0}
             max={1}

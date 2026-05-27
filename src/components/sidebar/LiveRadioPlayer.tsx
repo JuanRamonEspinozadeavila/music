@@ -28,10 +28,16 @@ export function LiveRadioPlayer() {
       stopRadio();
     };
 
-    window.addEventListener("brame:pause-radio-player", handlePauseRadio);
+    window.addEventListener(
+      "conexionrock:pause-radio-player",
+      handlePauseRadio,
+    );
 
     return () => {
-      window.removeEventListener("brame:pause-radio-player", handlePauseRadio);
+      window.removeEventListener(
+        "conexionrock:pause-radio-player",
+        handlePauseRadio,
+      );
     };
   }, []);
 
@@ -44,7 +50,7 @@ export function LiveRadioPlayer() {
       return;
     }
 
-    window.dispatchEvent(new Event("brame:pause-main-player"));
+    window.dispatchEvent(new Event("conexionrock:pause-main-player"));
 
     audio.src = STREAM_URL;
     audio.volume = muted ? 0 : volume;
@@ -82,22 +88,26 @@ export function LiveRadioPlayer() {
   };
 
   return (
-    <div className="brame-live-radio">
-      <div className="brame-live-radio-top">
-        <span className="brame-live-dot" />
+    <div className="conexionrock-live-radio">
+      <div className="conexionrock-live-radio-top">
+        <span className="conexionrock-live-dot" />
         <span>EN VIVO</span>
       </div>
 
-      <div className="uk-text-center brame-live-radio-title">
+      <div className="uk-text-center conexionrock-live-radio-title">
         <Radio size={18} />
-        <strong>Radio Brame</strong>
+        <strong>Radio conexionrock</strong>
       </div>
 
-   <button
-  type="button"
-  onClick={togglePlay}
-  className={playing ? "brame-live-play is-playing" : "brame-live-play"}
->
+      <button
+        type="button"
+        onClick={togglePlay}
+        className={
+          playing
+            ? "conexionrock-live-play is-playing"
+            : "conexionrock-live-play"
+        }
+      >
         {playing ? (
           <>
             <Pause size={18} fill="currentColor" />
@@ -111,9 +121,13 @@ export function LiveRadioPlayer() {
         )}
       </button>
 
-      <div className="brame-live-volume">
+      <div className="conexionrock-live-volume">
         <button type="button" onClick={toggleMute}>
-          {muted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          {muted || volume === 0 ? (
+            <VolumeX size={16} />
+          ) : (
+            <Volume2 size={16} />
+          )}
         </button>
 
         <input

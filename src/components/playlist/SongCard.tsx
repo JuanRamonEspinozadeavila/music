@@ -39,9 +39,7 @@ export function SongCard({ song }: Props) {
     loadLike();
   }, [song.id]);
 
-  const handleLike = async (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
     if (!userId) {
@@ -74,34 +72,30 @@ export function SongCard({ song }: Props) {
     setLiked(result.liked);
   };
 
-  const handlePlay = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handlePlay = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setSong(song);
   };
 
   return (
-    <div  
-      className="brame-song-card uk-position-relative"
+    <div
+      className="conexionrock-song-card uk-position-relative"
       onClick={() => setSong(song)}
     >
-      <div className="brame-song-cover-wrap">
+      <div className="conexionrock-song-cover-wrap">
         <img
           src={song.cover}
           alt={song.title}
-          className="brame-song-cover"
+          className="conexionrock-song-cover"
         />
 
-        <span className="brame-song-badge">
+        <span className="conexionrock-song-badge">
           {song.type || "Canción"}
         </span>
 
         <button
           type="button"
-          className={`brame-card-like ${
-            liked ? "is-liked" : ""
-          }`}
+          className={`conexionrock-card-like ${liked ? "is-liked" : ""}`}
           aria-label="Like"
           onClick={handleLike}
           disabled={savingLike}
@@ -115,7 +109,7 @@ export function SongCard({ song }: Props) {
 
         <button
           type="button"
-          className="brame-card-play"
+          className="conexionrock-card-play"
           onClick={handlePlay}
           aria-label="Reproducir"
         >
@@ -123,15 +117,11 @@ export function SongCard({ song }: Props) {
         </button>
       </div>
 
-      <div className="brame-song-info">
+      <div className="conexionrock-song-info">
         <h3>{song.title}</h3>
         <p>{song.artist}</p>
 
-        {song.cdo && (
-          <span className="brame-song-cdo">
-            {song.cdo}
-          </span>
-        )}
+        {song.cdo && <span className="conexionrock-song-cdo">{song.cdo}</span>}
       </div>
     </div>
   );

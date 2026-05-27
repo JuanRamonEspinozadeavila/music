@@ -9,7 +9,16 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const { title, artist, description, type, cdo } = body;
+    const {
+      title,
+      artist,
+      description,
+      type,
+      cdo,
+      is_featured_content,
+      featured_order,
+      featured_link,
+    } = body;
 
     if (!id) {
       return NextResponse.json(
@@ -26,16 +35,16 @@ export async function PATCH(
         description,
         type,
         cdo,
+        is_featured_content: Boolean(is_featured_content),
+        featured_order: Number(featured_order || 0),
+        featured_link: featured_link || "",
       })
       .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -73,10 +82,7 @@ export async function DELETE(
       .eq("id", id);
 
     if (error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({

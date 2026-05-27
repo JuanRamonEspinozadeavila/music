@@ -14,6 +14,9 @@ interface MediaItem {
   cdo: string;
   audio_url: string;
   cover_url: string;
+  is_featured_content: boolean;
+  featured_order: number;
+  featured_link: string;
 }
 
 export default function AdminMediaPage() {
@@ -25,7 +28,9 @@ export default function AdminMediaPage() {
   const loadItems = async () => {
     const { data, error } = await supabase
       .from("media_items")
-      .select("id,title,artist,description,type,cdo,audio_url,cover_url")
+      .select(
+        "id,title,artist,description,type,cdo,audio_url,cover_url,is_featured_content,featured_order,featured_link",
+      )
       .order("id", { ascending: false });
 
     if (error) {
@@ -40,29 +45,27 @@ export default function AdminMediaPage() {
 
   useEffect(() => {
     const checkAccess = async () => {
-    const allowedAdmin = await isAdmin();
+      const allowedAdmin = await isAdmin();
 
-    if (!allowedAdmin) {
-      window.location.href = "/";
-      return;
-    }
+      if (!allowedAdmin) {
+        window.location.href = "/";
+        return;
+      }
 
-    setAllowed(true);
-    await loadItems();
-  };
+      setAllowed(true);
+      await loadItems();
+    };
 
-  checkAccess();
-}, []);
+    checkAccess();
+  }, []);
 
   const updateItem = (
     id: string,
     field: keyof MediaItem,
-    value: string
+    value: string | boolean | number,
   ) => {
     setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
   };
 
@@ -80,6 +83,9 @@ export default function AdminMediaPage() {
         description: item.description,
         type: item.type,
         cdo: item.cdo,
+        is_featured_content: item.is_featured_content,
+        featured_order: item.featured_order || 0,
+        featured_link: item.featured_link || "",
       }),
     });
 
@@ -97,7 +103,7 @@ export default function AdminMediaPage() {
 
   const deleteItem = async (id: string) => {
     const confirmDelete = confirm(
-      "¿Seguro que quieres eliminar este contenido?"
+      "¿Seguro que quieres eliminar este contenido?",
     );
 
     if (!confirmDelete) return;
@@ -117,50 +123,51 @@ export default function AdminMediaPage() {
     alert("Contenido eliminado");
   };
 
-
   if (!allowed) {
-  return (
-    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-      <div className="uk-card brame-card uk-card-body">
-        <p className="brame-muted uk-margin-remove">Validando permisos...</p>
-      </div>
-    </main>
-  );
-}
+    return (
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Validando permisos...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   if (loading) {
     return (
-      <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-        <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando contenido...</p>
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Cargando contenido...
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="brame-shell" style={{ minHeight: "100vh" }}>
+    <main className="conexionrock-shell" style={{ minHeight: "100vh" }}>
       <div className="uk-container uk-container-expand uk-padding-large">
         <div className="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
           <div>
-            <h1 className="brame-title uk-margin-remove">
+            <h1 className="conexionrock-title uk-margin-remove">
               Administrar contenido
             </h1>
-            <p className="brame-muted uk-margin-small-top">
-              Edita canciones y podcasts cargados en BRAME Music.
+            <p className="conexionrock-muted uk-margin-small-top">
+              Edita canciones, podcasts y contenido destacado de conexionrock
+              Music.
             </p>
           </div>
 
-          <a
-            href="/admin/upload"
-            className="uk-button brame-button"
-          >
+          <a href="/admin/upload" className="uk-button conexionrock-button">
             Subir nuevo
           </a>
         </div>
 
         <div
-          className="uk-card brame-card uk-card-body"
+          className="uk-card conexionrock-card uk-card-body"
           style={{ overflowX: "auto" }}
         >
           <table className="uk-table uk-table-divider uk-table-middle">
@@ -172,6 +179,9 @@ export default function AdminMediaPage() {
                 <th>Tipo</th>
                 <th>CDO</th>
                 <th>Descripción</th>
+                <th>Destacado</th>
+                <th>Orden</th>
+                <th>Link destacado</th>
                 <th>Audio</th>
                 <th>Acciones</th>
               </tr>
@@ -193,13 +203,13 @@ export default function AdminMediaPage() {
                         }}
                       />
                     ) : (
-                      <span className="brame-muted">Sin portada</span>
+                      <span className="conexionrock-muted">Sin portada</span>
                     )}
                   </td>
 
                   <td>
                     <input
-                      className="uk-input brame-input"
+                      className="uk-input conexionrock-input"
                       value={item.title || ""}
                       onChange={(e) =>
                         updateItem(item.id, "title", e.target.value)
@@ -209,7 +219,7 @@ export default function AdminMediaPage() {
 
                   <td>
                     <input
-                      className="uk-input brame-input"
+                      className="uk-input conexionrock-input"
                       value={item.artist || ""}
                       onChange={(e) =>
                         updateItem(item.id, "artist", e.target.value)
@@ -219,13 +229,13 @@ export default function AdminMediaPage() {
 
                   <td>
                     <select
-                      className="uk-select brame-select"
+                      className="uk-select conexionrock-select"
                       value={item.type}
                       onChange={(e) =>
                         updateItem(
                           item.id,
                           "type",
-                          e.target.value as "song" | "podcast"
+                          e.target.value as "song" | "podcast",
                         )
                       }
                     >
@@ -236,7 +246,7 @@ export default function AdminMediaPage() {
 
                   <td>
                     <select
-                      className="uk-select brame-select"
+                      className="uk-select conexionrock-select"
                       value={item.cdo || ""}
                       onChange={(e) =>
                         updateItem(item.id, "cdo", e.target.value)
@@ -253,13 +263,66 @@ export default function AdminMediaPage() {
 
                   <td>
                     <textarea
-                      className="uk-textarea brame-input"
+                      className="uk-textarea conexionrock-input"
                       value={item.description || ""}
                       rows={3}
                       onChange={(e) =>
                         updateItem(item.id, "description", e.target.value)
                       }
                       style={{ minWidth: "220px", height: "auto" }}
+                    />
+                  </td>
+
+                  <td>
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        color: "#fff",
+                        fontWeight: 800,
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!!item.is_featured_content}
+                        onChange={(e) =>
+                          updateItem(
+                            item.id,
+                            "is_featured_content",
+                            e.target.checked,
+                          )
+                        }
+                      />
+                      Sí
+                    </label>
+                  </td>
+
+                  <td>
+                    <input
+                      type="number"
+                      className="uk-input conexionrock-input"
+                      value={item.featured_order || 0}
+                      onChange={(e) =>
+                        updateItem(
+                          item.id,
+                          "featured_order",
+                          Number(e.target.value),
+                        )
+                      }
+                      style={{ minWidth: "90px" }}
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      className="uk-input conexionrock-input"
+                      placeholder="https://..."
+                      value={item.featured_link || ""}
+                      onChange={(e) =>
+                        updateItem(item.id, "featured_link", e.target.value)
+                      }
+                      style={{ minWidth: "220px" }}
                     />
                   </td>
 
@@ -271,7 +334,7 @@ export default function AdminMediaPage() {
                     <div className="uk-flex uk-flex-column" style={{ gap: 8 }}>
                       <button
                         type="button"
-                        className="uk-button brame-button"
+                        className="uk-button conexionrock-button"
                         onClick={() => saveItem(item)}
                         disabled={savingId === item.id}
                       >
@@ -280,7 +343,7 @@ export default function AdminMediaPage() {
 
                       <button
                         type="button"
-                        className="uk-button brame-button-secondary"
+                        className="uk-button conexionrock-button-secondary"
                         onClick={() => deleteItem(item.id)}
                       >
                         Eliminar
@@ -293,7 +356,7 @@ export default function AdminMediaPage() {
           </table>
 
           {items.length === 0 && (
-            <p className="brame-muted uk-text-center">
+            <p className="conexionrock-muted uk-text-center">
               Todavía no hay contenido cargado.
             </p>
           )}

@@ -49,7 +49,7 @@ export default function PlaylistCdoPage({ params }: Props) {
       const mappedSongs: Song[] = (data || []).map((item) => ({
         id: item.id,
         title: item.title,
-        artist: item.artist || "BRAME Music",
+        artist: item.artist || "conexionrock Music",
         description: item.description || "",
         type: item.type,
         cdo: item.cdo || "",
@@ -68,16 +68,18 @@ export default function PlaylistCdoPage({ params }: Props) {
 
   if (loading) {
     return (
-      <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-        <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando playlist...</p>
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Cargando playlist...
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -88,27 +90,25 @@ export default function PlaylistCdoPage({ params }: Props) {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding-large">
-          <Link href="/" className="brame-muted">
+          <Link href="/" className="conexionrock-muted">
             ← Volver al inicio
           </Link>
 
-          <div className="uk-card brame-card uk-card-body uk-margin-medium-top uk-margin-large-bottom">
-            <p className="uk-text-uppercase brame-muted uk-margin-small-bottom">
+          <div className="uk-card conexionrock-card uk-card-body uk-margin-medium-top uk-margin-large-bottom">
+            <p className="uk-text-uppercase conexionrock-muted uk-margin-small-bottom">
               Playlist CDO
             </p>
 
-            <h1 className="brame-title uk-margin-remove">
-              {cdoName}
-            </h1>
+            <h1 className="conexionrock-title uk-margin-remove">{cdoName}</h1>
 
-            <p className="brame-muted uk-margin-small-top">
+            <p className="conexionrock-muted uk-margin-small-top">
               Contenido disponible para este CDO.
             </p>
           </div>
 
           {songs.length === 0 ? (
-            <div className="uk-card brame-card uk-card-body">
-              <p className="brame-muted uk-margin-remove">
+            <div className="uk-card conexionrock-card uk-card-body">
+              <p className="conexionrock-muted uk-margin-remove">
                 Todavía no hay canciones o podcasts para este CDO.
               </p>
             </div>
@@ -126,8 +126,6 @@ export default function PlaylistCdoPage({ params }: Props) {
           )}
         </div>
       </section>
-
-  
     </main>
   );
 }

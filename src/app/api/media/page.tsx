@@ -40,15 +40,9 @@ export default function AdminMediaPage() {
     loadItems();
   }, []);
 
-  const updateItem = (
-    id: string,
-    field: keyof MediaItem,
-    value: string
-  ) => {
+  const updateItem = (id: string, field: keyof MediaItem, value: string) => {
     setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
     );
   };
 
@@ -83,7 +77,7 @@ export default function AdminMediaPage() {
 
   const deleteItem = async (id: string) => {
     const confirmDelete = confirm(
-      "¿Seguro que quieres eliminar este contenido?"
+      "¿Seguro que quieres eliminar este contenido?",
     );
 
     if (!confirmDelete) return;
@@ -105,37 +99,36 @@ export default function AdminMediaPage() {
 
   if (loading) {
     return (
-      <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-        <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando contenido...</p>
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Cargando contenido...
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="brame-shell" style={{ minHeight: "100vh" }}>
+    <main className="conexionrock-shell" style={{ minHeight: "100vh" }}>
       <div className="uk-container uk-container-expand uk-padding-large">
         <div className="uk-flex uk-flex-between uk-flex-middle uk-margin-medium-bottom">
           <div>
-            <h1 className="brame-title uk-margin-remove">
+            <h1 className="conexionrock-title uk-margin-remove">
               Administrar contenido
             </h1>
-            <p className="brame-muted uk-margin-small-top">
-              Edita canciones y podcasts cargados en BRAME Music.
+            <p className="conexionrock-muted uk-margin-small-top">
+              Edita canciones y podcasts cargados en conexionrock Music.
             </p>
           </div>
 
-          <a
-            href="/admin/upload"
-            className="uk-button brame-button"
-          >
+          <a href="/admin/upload" className="uk-button conexionrock-button">
             Subir nuevo
           </a>
         </div>
 
         <div
-          className="uk-card brame-card uk-card-body"
+          className="uk-card conexionrock-card uk-card-body"
           style={{ overflowX: "auto" }}
         >
           <table className="uk-table uk-table-divider uk-table-middle">
@@ -168,13 +161,13 @@ export default function AdminMediaPage() {
                         }}
                       />
                     ) : (
-                      <span className="brame-muted">Sin portada</span>
+                      <span className="conexionrock-muted">Sin portada</span>
                     )}
                   </td>
 
                   <td>
                     <input
-                      className="uk-input brame-input"
+                      className="uk-input conexionrock-input"
                       value={item.title || ""}
                       onChange={(e) =>
                         updateItem(item.id, "title", e.target.value)
@@ -184,7 +177,7 @@ export default function AdminMediaPage() {
 
                   <td>
                     <input
-                      className="uk-input brame-input"
+                      className="uk-input conexionrock-input"
                       value={item.artist || ""}
                       onChange={(e) =>
                         updateItem(item.id, "artist", e.target.value)
@@ -194,13 +187,13 @@ export default function AdminMediaPage() {
 
                   <td>
                     <select
-                      className="uk-select brame-select"
+                      className="uk-select conexionrock-select"
                       value={item.type}
                       onChange={(e) =>
                         updateItem(
                           item.id,
                           "type",
-                          e.target.value as "song" | "podcast"
+                          e.target.value as "song" | "podcast",
                         )
                       }
                     >
@@ -211,7 +204,7 @@ export default function AdminMediaPage() {
 
                   <td>
                     <select
-                      className="uk-select brame-select"
+                      className="uk-select conexionrock-select"
                       value={item.cdo || ""}
                       onChange={(e) =>
                         updateItem(item.id, "cdo", e.target.value)
@@ -228,7 +221,7 @@ export default function AdminMediaPage() {
 
                   <td>
                     <textarea
-                      className="uk-textarea brame-input"
+                      className="uk-textarea conexionrock-input"
                       value={item.description || ""}
                       rows={3}
                       onChange={(e) =>
@@ -246,7 +239,7 @@ export default function AdminMediaPage() {
                     <div className="uk-flex uk-flex-column" style={{ gap: 8 }}>
                       <button
                         type="button"
-                        className="uk-button brame-button"
+                        className="uk-button conexionrock-button"
                         onClick={() => saveItem(item)}
                         disabled={savingId === item.id}
                       >
@@ -255,7 +248,7 @@ export default function AdminMediaPage() {
 
                       <button
                         type="button"
-                        className="uk-button brame-button-secondary"
+                        className="uk-button conexionrock-button-secondary"
                         onClick={() => deleteItem(item.id)}
                       >
                         Eliminar
@@ -268,7 +261,7 @@ export default function AdminMediaPage() {
           </table>
 
           {items.length === 0 && (
-            <p className="brame-muted uk-text-center">
+            <p className="conexionrock-muted uk-text-center">
               Todavía no hay contenido cargado.
             </p>
           )}

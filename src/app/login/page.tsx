@@ -3,15 +3,14 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-const ALLOWED_DOMAIN = "@grupobrame.com";
-const ALLOWED_EMAILS = ["idiwjr@gmail.com","janeth.salas@brvo.mx"];
+const ALLOWED_DOMAIN = "@grupoconexionrock.com";
+const ALLOWED_EMAILS = ["idiwjr@gmail.com", "janeth.salas@brvo.mx"];
 
 function isAllowedEmail(email: string) {
   const cleanEmail = email.toLowerCase().trim();
 
   return (
-    cleanEmail.endsWith(ALLOWED_DOMAIN) ||
-    ALLOWED_EMAILS.includes(cleanEmail)
+    cleanEmail.endsWith(ALLOWED_DOMAIN) || ALLOWED_EMAILS.includes(cleanEmail)
   );
 }
 
@@ -26,7 +25,9 @@ export default function LoginPage() {
 
   const validateEmailDomain = (cleanEmail: string) => {
     if (!isAllowedEmail(cleanEmail)) {
-    alert("Solo se permiten correos @grupobrame.com o correos autorizados.");
+      alert(
+        "Solo se permiten correos @grupoconexionrock.com o correos autorizados.",
+      );
       return false;
     }
 
@@ -74,7 +75,9 @@ export default function LoginPage() {
         return;
       }
 
-      alert("Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.");
+      alert(
+        "Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.",
+      );
       setMode("login");
     } catch (err) {
       console.error(err);
@@ -152,7 +155,7 @@ export default function LoginPage() {
             marginBottom: "12px",
           }}
         >
-          BRAME Music
+          conexionrock Music
         </h1>
 
         <p
@@ -161,7 +164,7 @@ export default function LoginPage() {
             marginBottom: "30px",
           }}
         >
-          Acceso exclusivo para correos @grupobrame.com
+          Acceso exclusivo para correos @grupoconexionrock.com
         </p>
 
         <div
@@ -232,7 +235,7 @@ export default function LoginPage() {
 
         <input
           type="email"
-          placeholder="Email @grupobrame.com"
+          placeholder="Email @grupoconexionrock.com"
           value={email}
           disabled={loading}
           onChange={(e) => setEmail(e.target.value)}

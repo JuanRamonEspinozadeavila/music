@@ -50,8 +50,8 @@ export function SponsorEventCard() {
   const item = items[index];
 
   return (
-    <div className="brame-sponsor-card">
-      <p className="brame-sponsor-kicker">
+    <div className="conexionrock-sponsor-card">
+      <p className="conexionrock-sponsor-kicker">
         {item.label || "Patrocinador / Evento"}
       </p>
 
@@ -59,20 +59,21 @@ export function SponsorEventCard() {
         <img
           src={item.image_url}
           alt={item.title}
-          className="brame-sponsor-image"
+          className="conexionrock-sponsor-image"
         />
       ) : (
-        <div className="brame-sponsor-box">
+        <div className="conexionrock-sponsor-box">
           <span>{item.title}</span>
         </div>
       )}
 
-      <p className="brame-sponsor-copy">
-        {item.description || "Conoce más detalles de este evento o patrocinador."}
+      <p className="conexionrock-sponsor-copy">
+        {item.description ||
+          "Conoce más detalles de este evento o patrocinador."}
       </p>
 
       {items.length > 1 && (
-        <div className="brame-sponsor-dots">
+        <div className="conexionrock-sponsor-dots">
           {items.map((dot, dotIndex) => (
             <button
               key={dot.id}
@@ -86,7 +87,7 @@ export function SponsorEventCard() {
       )}
 
       {item.link_url && (
-        <a href={item.link_url} className="brame-sponsor-link">
+        <a href={item.link_url} className="conexionrock-sponsor-link">
           Ver más
         </a>
       )}

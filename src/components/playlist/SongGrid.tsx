@@ -35,15 +35,17 @@ export function SongGrid({ songs: externalSongs }: Props) {
   }, [songs, setQueue]);
 
   if (loading) {
-    return <p className="brame-muted">Cargando contenido...</p>;
+    return <p className="conexionrock-muted">Cargando contenido...</p>;
   }
 
   if (songs.length === 0) {
-    return <p className="brame-muted">Todavía no hay contenido cargado.</p>;
+    return (
+      <p className="conexionrock-muted">Todavía no hay contenido cargado.</p>
+    );
   }
 
   return (
-    <div className="brame-song-grid">
+    <div className="conexionrock-song-grid">
       {songs.map((song) => (
         <SongCard key={song.id} song={song} />
       ))}

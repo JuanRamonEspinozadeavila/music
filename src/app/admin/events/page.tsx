@@ -32,7 +32,9 @@ export default function AdminEventsPage() {
   const loadItems = async () => {
     const { data, error } = await supabase
       .from("sponsors_events")
-      .select("id, title, description, image_url, link_url, label, is_active, sort_order")
+      .select(
+        "id, title, description, image_url, link_url, label, is_active, sort_order",
+      )
       .order("sort_order", { ascending: true });
 
     if (error) {
@@ -46,20 +48,20 @@ export default function AdminEventsPage() {
   };
 
   useEffect(() => {
-  const checkAccess = async () => {
-    const allowedAdmin = await isAdmin();
+    const checkAccess = async () => {
+      const allowedAdmin = await isAdmin();
 
-    if (!allowedAdmin) {
-      window.location.href = "/";
-      return;
-    }
+      if (!allowedAdmin) {
+        window.location.href = "/";
+        return;
+      }
 
-    setAllowed(true);
-    await loadItems();
-  };
+      setAllowed(true);
+      await loadItems();
+    };
 
-  checkAccess();
-}, []);
+    checkAccess();
+  }, []);
 
   const resetForm = () => {
     setTitle("");
@@ -133,19 +135,20 @@ export default function AdminEventsPage() {
     await loadItems();
   };
 
-if (!allowed) {
-  return (
-    <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-      <div className="uk-card brame-card uk-card-body">
-        <p className="brame-muted uk-margin-remove">Validando permisos...</p>
-      </div>
-    </main>
-  );
-}
+  if (!allowed) {
+    return (
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Validando permisos...
+          </p>
+        </div>
+      </main>
+    );
+  }
 
-
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -157,35 +160,36 @@ if (!allowed) {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding">
-          <div className="brame-admin-events-hero">
-            <p className="brame-eyebrow uk-margin-small-bottom">
+          <div className="conexionrock-admin-events-hero">
+            <p className="conexionrock-eyebrow uk-margin-small-bottom">
               ADMINISTRACIÓN
             </p>
 
-            <h1 className="brame-events-title uk-margin-remove">
+            <h1 className="conexionrock-events-title uk-margin-remove">
               Eventos y patrocinadores
             </h1>
 
-            <p className="brame-muted uk-margin-small-top">
-              Crea y administra los espacios que aparecen en el sidebar y en la página de eventos.
+            <p className="conexionrock-muted uk-margin-small-top">
+              Crea y administra los espacios que aparecen en el sidebar y en la
+              página de eventos.
             </p>
           </div>
 
-          <section className="brame-admin-events-layout uk-margin-large-top">
-            <form onSubmit={handleCreate} className="brame-admin-form">
+          <section className="conexionrock-admin-events-layout uk-margin-large-top">
+            <form onSubmit={handleCreate} className="conexionrock-admin-form">
               <h2>Nuevo espacio</h2>
 
               <label>Título</label>
               <input
-                className="uk-input brame-input"
+                className="uk-input conexionrock-input"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Ej. Festival BRAME 2026"
+                placeholder="Ej. Festival conexionrock 2026"
               />
 
               <label>Descripción</label>
               <textarea
-                className="uk-textarea brame-input brame-textarea"
+                className="uk-textarea conexionrock-input conexionrock-textarea"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Descripción del evento o patrocinador"
@@ -193,7 +197,7 @@ if (!allowed) {
 
               <label>URL de imagen</label>
               <input
-                className="uk-input brame-input"
+                className="uk-input conexionrock-input"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
                 placeholder="https://..."
@@ -201,7 +205,7 @@ if (!allowed) {
 
               <label>Link</label>
               <input
-                className="uk-input brame-input"
+                className="uk-input conexionrock-input"
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
                 placeholder="/events o https://..."
@@ -209,7 +213,7 @@ if (!allowed) {
 
               <label>Etiqueta</label>
               <select
-                className="uk-select brame-select"
+                className="uk-select conexionrock-select"
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
               >
@@ -222,49 +226,52 @@ if (!allowed) {
               <label>Orden</label>
               <input
                 type="number"
-                className="uk-input brame-input"
+                className="uk-input conexionrock-input"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(Number(e.target.value))}
               />
 
               <button
                 type="submit"
-                className="uk-button brame-button uk-width-1-1"
+                className="uk-button conexionrock-button uk-width-1-1"
                 disabled={saving}
               >
                 {saving ? "Guardando..." : "Crear espacio"}
               </button>
             </form>
 
-            <div className="brame-admin-list">
+            <div className="conexionrock-admin-list">
               <h2>Publicados</h2>
 
               {loading ? (
-                <p className="brame-muted">Cargando...</p>
+                <p className="conexionrock-muted">Cargando...</p>
               ) : items.length === 0 ? (
-                <p className="brame-muted">Todavía no hay espacios creados.</p>
+                <p className="conexionrock-muted">
+                  Todavía no hay espacios creados.
+                </p>
               ) : (
-                <div className="brame-admin-items">
+                <div className="conexionrock-admin-items">
                   {items.map((item) => (
-                    <article key={item.id} className="brame-admin-item">
+                    <article key={item.id} className="conexionrock-admin-item">
                       {item.image_url ? (
                         <img src={item.image_url} alt={item.title} />
                       ) : (
-                        <div className="brame-admin-placeholder">
+                        <div className="conexionrock-admin-placeholder">
                           {item.label || "Evento"}
                         </div>
                       )}
 
                       <div>
-                        <p className="brame-event-label">
-                          {item.label || "Evento"} · Orden {item.sort_order || 0}
+                        <p className="conexionrock-event-label">
+                          {item.label || "Evento"} · Orden{" "}
+                          {item.sort_order || 0}
                         </p>
 
                         <h3>{item.title}</h3>
 
                         <p>{item.description || "Sin descripción"}</p>
 
-                        <div className="brame-admin-actions">
+                        <div className="conexionrock-admin-actions">
                           <button
                             type="button"
                             onClick={() => toggleActive(item)}

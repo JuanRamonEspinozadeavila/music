@@ -43,12 +43,12 @@ export default function HomePage() {
         .eq("id", data.user.id)
         .single();
 
-     setCdo(profile?.cdo || data.user.user_metadata?.cdo || "");
+      setCdo(profile?.cdo || data.user.user_metadata?.cdo || "");
 
-const featured = await getWeeklyFeatured();
-setWeeklySongs(featured);
+      const featured = await getWeeklyFeatured();
+      setWeeklySongs(featured);
 
-setLoading(false);
+      setLoading(false);
     };
 
     loadSession();
@@ -61,9 +61,9 @@ setLoading(false);
 
   if (loading) {
     return (
-      <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-        <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
             Cargando experiencia...
           </p>
         </div>
@@ -72,7 +72,7 @@ setLoading(false);
   }
 
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -85,7 +85,7 @@ setLoading(false);
       >
         <div className="uk-container uk-container-expand uk-padding">
           <section
-            className="brame-home-hero uk-margin-medium-bottom"
+            className="conexionrock-home-hero uk-margin-medium-bottom"
             style={{
               backgroundImage: currentSong
                 ? `linear-gradient(90deg, rgba(18,18,18,0.96) 0%, rgba(18,18,18,0.82) 48%, rgba(18,18,18,0.45) 100%), url(${currentSong.cover})`
@@ -94,33 +94,33 @@ setLoading(false);
               backgroundPosition: "center",
             }}
           >
-            <div className="brame-hero-glow" />
+            <div className="conexionrock-hero-glow" />
 
-            <div className="brame-hero-layout">
-              <div className="brame-hero-left">
-                <p className="brame-eyebrow uk-margin-small-bottom">
+            <div className="conexionrock-hero-layout">
+              <div className="conexionrock-hero-left">
+                <p className="conexionrock-eyebrow uk-margin-small-bottom">
                   {currentSong
                     ? isPlaying
                       ? "REPRODUCIENDO AHORA"
                       : "LISTO PARA ESCUCHAR"
-                    : "BRAME MUSIC · CURADURÍA INTERNA"}
+                    : "conexionrock MUSIC · CURADURÍA INTERNA"}
                 </p>
 
-                <h1 className="brame-hero-title uk-margin-remove">
+                <h1 className="conexionrock-hero-title uk-margin-remove">
                   {currentSong
                     ? currentSong.title
                     : "Música para equipos que se mueven distinto."}
                 </h1>
 
-                <p className="brame-hero-copy uk-margin-small-top">
+                <p className="conexionrock-hero-copy uk-margin-small-top">
                   {currentSong
                     ? `${currentSong.artist} · ${
-                        currentSong.cdo || "BRAME Music"
+                        currentSong.cdo || "conexionrock Music"
                       }`
                     : "Explora canciones, podcasts y contenidos seleccionados para tu CDO."}
                 </p>
 
-                <div className="brame-user-strip">
+                <div className="conexionrock-user-strip">
                   {currentSong ? (
                     <>
                       <span>{currentSong.type || "Contenido"}</span>
@@ -136,84 +136,62 @@ setLoading(false);
                   )}
                 </div>
 
-                <div className="brame-hero-actions brame-hero-actions-bottom">
-                  <a href="/search" className="brame-pill-button">
+                <div className="conexionrock-hero-actions conexionrock-hero-actions-bottom">
+                  <a href="/search" className="conexionrock-pill-button">
                     Buscar contenido
                   </a>
 
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="brame-ghost-button"
+                    className="conexionrock-ghost-button"
                   >
                     Cerrar sesión
                   </button>
                 </div>
               </div>
 
-             <aside className="brame-weekly-feature">
-  <p className="brame-weekly-kicker">Música destacada</p>
+              <aside className="conexionrock-weekly-feature">
+                <p className="conexionrock-weekly-kicker">
+                  Contenido destacado
+                </p>
 
-  <h2>De la semana</h2>
-
-  {weeklySongs.length > 0 ? (
-    <>
-      <div className="brame-weekly-current">
-        <img
-          src={weeklySongs[0].cover}
-          alt={weeklySongs[0].title}
-          className="brame-weekly-cover"
-        />
-
-        <div>
-          <p className="brame-weekly-label">Selección principal</p>
-
-          <h3>{weeklySongs[0].title}</h3>
-
-          <p>{weeklySongs[0].artist}</p>
-        </div>
-      </div>
-
-      {weeklySongs.slice(1).map((song) => (
-        <div key={song.id} className="brame-weekly-mini">
-          <img src={song.cover} alt={song.title} />
-
-          <div>
-            <strong>{song.title}</strong>
-            <span>{song.artist}</span>
-          </div>
-        </div>
-      ))}
-    </>
-  ) : (
-    <p>
-      Todavía no hay música destacada de la semana. Marca canciones desde
-      Supabase.
-    </p>
-  )}
-
-  <a href="/search" className="brame-weekly-link">
-    Explorar selección
-  </a>
-</aside>
+                {weeklySongs.length > 0 ? (
+                  <div className="conexionrock-featured-content-list">
+                    {weeklySongs.map((song) => (
+                      <button
+                        key={song.id}
+                        type="button"
+                        className="conexionrock-featured-content-card"
+                        onClick={() => usePlayerStore.getState().setSong(song)}
+                      >
+                        <img src={song.cover} alt={song.title} />
+                        <strong>{song.title}</strong>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p>Todavía no hay contenido destacado.</p>
+                )}
+              </aside>
             </div>
           </section>
 
           <Header />
 
           <section className="uk-margin-small-top">
-            <div className="brame-section-heading">
+            <div className="conexionrock-section-heading">
               <div>
-                <p className="brame-eyebrow uk-margin-remove">
-                  NUEVO EN BRAME
+                <p className="conexionrock-eyebrow uk-margin-remove">
+                  NUEVO EN conexionrock
                 </p>
 
-                <h2 className="brame-section-title uk-margin-remove">
+                <h2 className="conexionrock-section-title uk-margin-remove">
                   Selección destacada
                 </h2>
               </div>
 
-              <a href="/search" className="brame-section-link">
+              <a href="/search" className="conexionrock-section-link">
                 Ver todo
               </a>
             </div>

@@ -35,7 +35,7 @@ export default function FavoritesPage() {
             audio_url,
             cover_url
           )
-        `
+        `,
         )
         .eq("user_id", userData.user.id)
         .order("created_at", { ascending: false });
@@ -53,7 +53,7 @@ export default function FavoritesPage() {
         .map((item: any) => ({
           id: item.id,
           title: item.title,
-          artist: item.artist || "BRAME Music",
+          artist: item.artist || "conexionrock Music",
           description: item.description || "",
           type: item.type,
           cdo: item.cdo || "",
@@ -72,16 +72,18 @@ export default function FavoritesPage() {
 
   if (loading) {
     return (
-      <main className="brame-shell uk-flex uk-flex-center uk-flex-middle">
-        <div className="uk-card brame-card uk-card-body">
-          <p className="brame-muted uk-margin-remove">Cargando favoritos...</p>
+      <main className="conexionrock-shell uk-flex uk-flex-center uk-flex-middle">
+        <div className="uk-card conexionrock-card uk-card-body">
+          <p className="conexionrock-muted uk-margin-remove">
+            Cargando favoritos...
+          </p>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="brame-shell" style={{ display: "flex" }}>
+    <main className="conexionrock-shell" style={{ display: "flex" }}>
       <Sidebar />
 
       <section
@@ -93,25 +95,25 @@ export default function FavoritesPage() {
         }}
       >
         <div className="uk-container uk-container-expand uk-padding-large">
-          <Link href="/" className="brame-muted">
+          <Link href="/" className="conexionrock-muted">
             ← Volver al inicio
           </Link>
 
-          <div className="uk-card brame-card uk-card-body uk-margin-medium-top uk-margin-large-bottom">
-            <p className="uk-text-uppercase brame-muted uk-margin-small-bottom">
+          <div className="uk-card conexionrock-card uk-card-body uk-margin-medium-top uk-margin-large-bottom">
+            <p className="uk-text-uppercase conexionrock-muted uk-margin-small-bottom">
               Biblioteca personal
             </p>
 
-            <h1 className="brame-title uk-margin-remove">Favoritos</h1>
+            <h1 className="conexionrock-title uk-margin-remove">Favoritos</h1>
 
-            <p className="brame-muted uk-margin-small-top">
+            <p className="conexionrock-muted uk-margin-small-top">
               Tus canciones y podcasts guardados.
             </p>
           </div>
 
           {songs.length === 0 ? (
-            <div className="uk-card brame-card uk-card-body">
-              <p className="brame-muted uk-margin-remove">
+            <div className="uk-card conexionrock-card uk-card-body">
+              <p className="conexionrock-muted uk-margin-remove">
                 Todavía no tienes favoritos guardados.
               </p>
             </div>

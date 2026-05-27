@@ -12,8 +12,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "BRAME Music",
-  description: "BRAME Music Player",
+  title: "conexionrock Music",
+  description: "conexionrock Music Player",
 };
 
 export default function RootLayout({

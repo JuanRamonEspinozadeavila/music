@@ -15,7 +15,7 @@ export async function getMediaItems(): Promise<Song[]> {
   return (data || []).map((item) => ({
     id: item.id,
     title: item.title,
-    artist: item.artist || "BRAME Music",
+    artist: item.artist || "conexionrock Music",
     description: item.description || "",
     type: item.type,
     cdo: item.cdo || "",
