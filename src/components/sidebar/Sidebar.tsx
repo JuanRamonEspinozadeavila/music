@@ -49,7 +49,7 @@ export function Sidebar() {
       <div className="conexionrock-sidebar-inner">
         <Link href="/" className="conexionrock-brand-card">
           <img
-            src="/logo_radio.png"
+            src="/LogoCR.webp"
             alt="Logo Radioconexionrock"
             className="conexionrock-brand-logo"
           />
