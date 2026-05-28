@@ -1584,3 +1584,11 @@ textarea {
 .conexionrock-player-compact .conexionrock-player-controls {
   gap: 4px !important;
 }
+
+/* Remove default browser/UIkit blue underline */
+a:hover,
+a:focus,
+.uk-link:hover,
+.uk-link:focus {
+  text-decoration: none !important;
+}
