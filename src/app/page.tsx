@@ -11,11 +11,12 @@ import { getWeeklyFeatured } from "@/lib/getWeeklyFeatured";
 import { Song } from "@/types/song";
 
 export default function HomePage() {
-  const [name, setName] = useState("Usuario");
+  const [name, setName] = useState("Invitado");
   const [email, setEmail] = useState("");
   const [cdo, setCdo] = useState("");
   const [loading, setLoading] = useState(true);
   const [weeklySongs, setWeeklySongs] = useState<Song[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const currentSong = usePlayerStore((state) => state.currentSong);
   const isPlaying = usePlayerStore((state) => state.isPlaying);
@@ -25,9 +26,19 @@ export default function HomePage() {
       const { data } = await supabase.auth.getUser();
 
       if (!data.user) {
-        window.location.href = "/login";
+        setName("Invitado");
+        setEmail("");
+        setCdo("");
+        setIsLoggedIn(false);
+
+        const featured = await getWeeklyFeatured();
+        setWeeklySongs(featured);
+
+        setLoading(false);
         return;
       }
+
+      setIsLoggedIn(true);
 
       const displayName =
         data.user.user_metadata?.display_name ||
@@ -54,7 +65,12 @@ export default function HomePage() {
     loadSession();
   }, []);
 
-  const handleLogout = async () => {
+  const handleAuthAction = async () => {
+    if (!isLoggedIn) {
+      window.location.href = "/login";
+      return;
+    }
+
     await supabase.auth.signOut();
     window.location.href = "/login";
   };
@@ -103,21 +119,22 @@ export default function HomePage() {
                     ? isPlaying
                       ? "REPRODUCIENDO AHORA"
                       : "LISTO PARA ESCUCHAR"
-                    : "conexionrock MUSIC · CURADURÍA INTERNA"}
+                    : "conexionrock MUSIC · MODO INVITADO"}
                 </p>
 
                 <h1 className="conexionrock-hero-title uk-margin-remove">
                   {currentSong
                     ? currentSong.title
-                    : "Música para equipos que se mueven distinto."}
+                    : "Música independiente, podcasts y contenidos seleccionados."}
                 </h1>
 
                 <p className="conexionrock-hero-copy uk-margin-small-top">
                   {currentSong
-                    ? `${currentSong.artist} · ${
-                        currentSong.cdo || "conexionrock Music"
-                      }`
-                    : "Explora canciones, podcasts y contenidos seleccionados para tu CDO."}
+                    ? `${currentSong.artist} · ${currentSong.cdo || "conexionrock Music"
+                    }`
+                    : isLoggedIn
+                      ? "Explora canciones, podcasts y contenidos seleccionados para tu CDO."
+                      : "Puedes escuchar como invitado. Para guardar favoritos necesitas iniciar sesión."}
                 </p>
 
                 <div className="conexionrock-user-strip">
@@ -130,7 +147,7 @@ export default function HomePage() {
                   ) : (
                     <>
                       <span>{name}</span>
-                      <span>{email}</span>
+                      {email && <span>{email}</span>}
                       {cdo && <span>CDO: {cdo}</span>}
                     </>
                   )}
@@ -143,10 +160,10 @@ export default function HomePage() {
 
                   <button
                     type="button"
-                    onClick={handleLogout}
+                    onClick={handleAuthAction}
                     className="conexionrock-ghost-button"
                   >
-                    Cerrar sesión
+                    {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
                   </button>
                 </div>
               </div>

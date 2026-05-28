@@ -26,7 +26,7 @@ export default function LoginPage() {
   const validateEmailDomain = (cleanEmail: string) => {
     if (!isAllowedEmail(cleanEmail)) {
       alert(
-        "Solo se permiten correos @grupoconexionrock.com o correos autorizados.",
+        "Solo se permiten correos @grupoconexionrock.com o correos autorizados."
       );
       return false;
     }
@@ -51,9 +51,7 @@ export default function LoginPage() {
         return;
       }
 
-      if (!validateEmailDomain(cleanEmail)) {
-        return;
-      }
+      if (!validateEmailDomain(cleanEmail)) return;
 
       if (!password) {
         alert("Escribe tu contraseña");
@@ -76,8 +74,9 @@ export default function LoginPage() {
       }
 
       alert(
-        "Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.",
+        "Registro exitoso. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión."
       );
+
       setMode("login");
     } catch (err) {
       console.error(err);
@@ -98,9 +97,7 @@ export default function LoginPage() {
         return;
       }
 
-      if (!validateEmailDomain(cleanEmail)) {
-        return;
-      }
+      if (!validateEmailDomain(cleanEmail)) return;
 
       if (!password) {
         alert("Escribe tu contraseña");
@@ -124,6 +121,10 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGuest = () => {
+    window.location.href = "/";
   };
 
   return (
@@ -150,7 +151,7 @@ export default function LoginPage() {
         <h1
           style={{
             color: "#1DB954",
-            fontSize: "48px",
+            fontSize: "46px",
             fontWeight: "bold",
             marginBottom: "12px",
           }}
@@ -158,22 +159,30 @@ export default function LoginPage() {
           conexionrock Music
         </h1>
 
-        <p
-          style={{
-            color: "#999",
-            marginBottom: "30px",
-          }}
-        >
-          Acceso exclusivo para correos @grupoconexionrock.com
+        <p style={{ color: "#999", marginBottom: "24px" }}>
+          Inicia sesión o entra como invitado para escuchar música.
         </p>
 
-        <div
+        <button
+          type="button"
+          onClick={handleGuest}
+          disabled={loading}
           style={{
-            display: "flex",
-            gap: "10px",
-            marginBottom: "25px",
+            width: "100%",
+            height: "50px",
+            borderRadius: "999px",
+            border: "1px solid #1DB954",
+            background: "transparent",
+            color: "#1DB954",
+            fontWeight: "bold",
+            cursor: "pointer",
+            marginBottom: "24px",
           }}
         >
+          Continuar como invitado
+        </button>
+
+        <div style={{ display: "flex", gap: "10px", marginBottom: "25px" }}>
           <button
             type="button"
             onClick={() => setMode("login")}
@@ -183,13 +192,13 @@ export default function LoginPage() {
               height: "48px",
               borderRadius: "999px",
               border: "none",
-              background: mode === "login" ? "#1DB954" : "#111",
+              background: mode === "login" ? "#1DB954" : "#252525",
               color: mode === "login" ? "#000" : "#fff",
               fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
+              cursor: "pointer",
             }}
           >
-            LOGIN
+            Iniciar sesión
           </button>
 
           <button
@@ -200,77 +209,40 @@ export default function LoginPage() {
               flex: 1,
               height: "48px",
               borderRadius: "999px",
-              border: "1px solid #333",
-              background: mode === "register" ? "#1DB954" : "#111",
+              border: "none",
+              background: mode === "register" ? "#1DB954" : "#252525",
               color: mode === "register" ? "#000" : "#fff",
               fontWeight: "bold",
-              cursor: loading ? "not-allowed" : "pointer",
+              cursor: "pointer",
             }}
           >
-            REGISTER
+            Registrarse
           </button>
         </div>
 
         {mode === "register" && (
           <input
-            type="text"
-            placeholder="Name"
             value={name}
-            disabled={loading}
             onChange={(e) => setName(e.target.value)}
-            style={{
-              width: "100%",
-              height: "52px",
-              marginBottom: "15px",
-              borderRadius: "12px",
-              border: "1px solid #333",
-              background: "#111",
-              color: "#fff",
-              padding: "0 15px",
-              fontSize: "16px",
-              boxSizing: "border-box",
-            }}
+            placeholder="Nombre"
+            style={inputStyle}
           />
         )}
 
         <input
-          type="email"
-          placeholder="Email @grupoconexionrock.com"
           value={email}
-          disabled={loading}
           onChange={(e) => setEmail(e.target.value)}
-          style={{
-            width: "100%",
-            height: "52px",
-            marginBottom: "15px",
-            borderRadius: "12px",
-            border: "1px solid #333",
-            background: "#111",
-            color: "#fff",
-            padding: "0 15px",
-            fontSize: "16px",
-            boxSizing: "border-box",
-          }}
+          placeholder="Correo"
+          type="email"
+          style={inputStyle}
         />
 
         <input
-          type="password"
-          placeholder="Password"
           value={password}
-          disabled={loading}
           onChange={(e) => setPassword(e.target.value)}
-          style={{
-            width: "100%",
-            height: "52px",
-            marginBottom: "25px",
-            borderRadius: "12px",
-            border: "1px solid #333",
-            background: "#111",
-            color: "#fff",
-            padding: "0 15px",
-            fontSize: "16px",
-            boxSizing: "border-box",
-          }}
+          placeholder="Contraseña"
+          type="password"
+          style={inputStyle}
         />
 
         <button
@@ -279,20 +251,47 @@ export default function LoginPage() {
           disabled={loading}
           style={{
             width: "100%",
-            height: "56px",
+            height: "52px",
             borderRadius: "999px",
             border: "none",
             background: "#1DB954",
             color: "#000",
             fontWeight: "bold",
-            fontSize: "16px",
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.7 : 1,
+            cursor: "pointer",
+            marginTop: "10px",
           }}
         >
-          {loading ? "LOADING..." : mode === "login" ? "LOGIN" : "REGISTER"}
+          {loading
+            ? "Procesando..."
+            : mode === "login"
+              ? "Entrar"
+              : "Crear cuenta"}
         </button>
+
+        <p
+          style={{
+            color: "#777",
+            fontSize: "13px",
+            marginTop: "20px",
+            lineHeight: 1.5,
+          }}
+        >
+          Como invitado puedes escuchar música, ver biblioteca y eventos. Para
+          guardar favoritos necesitas iniciar sesión.
+        </p>
       </div>
     </main>
   );
 }
+
+const inputStyle: React.CSSProperties = {
+  width: "100%",
+  height: "50px",
+  borderRadius: "14px",
+  border: "1px solid #333",
+  background: "#101010",
+  color: "#fff",
+  padding: "0 16px",
+  marginBottom: "14px",
+  outline: "none",
+};

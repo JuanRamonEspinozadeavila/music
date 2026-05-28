@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 
+import { supabase } from "@/lib/supabase";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SongCard } from "@/components/playlist/SongCard";
 import { Song } from "@/types/song";
@@ -14,25 +14,26 @@ interface Props {
   }>;
 }
 
+interface MediaItem {
+  id: string;
+  title: string | null;
+  artist: string | null;
+  description: string | null;
+  type: "song" | "podcast";
+  cdo: string | null;
+  audio_url: string | null;
+  cover_url: string | null;
+}
+
 export default function PlaylistCdoPage({ params }: Props) {
-  const [cdoName, setCdoName] = useState("");
+  const resolvedParams = use(params);
+  const decodedCdo = decodeURIComponent(resolvedParams.cdo);
+
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadPlaylist = async () => {
-      const resolvedParams = await params;
-      const decodedCdo = decodeURIComponent(resolvedParams.cdo);
-
-      setCdoName(decodedCdo);
-
-      const { data: userData } = await supabase.auth.getUser();
-
-      if (!userData.user) {
-        window.location.href = "/login";
-        return;
-      }
-
       const { data, error } = await supabase
         .from("media_items")
         .select("id,title,artist,description,type,cdo,audio_url,cover_url")
@@ -46,14 +47,14 @@ export default function PlaylistCdoPage({ params }: Props) {
         return;
       }
 
-      const mappedSongs: Song[] = (data || []).map((item) => ({
+      const mappedSongs: Song[] = ((data || []) as MediaItem[]).map((item) => ({
         id: item.id,
-        title: item.title,
+        title: item.title || "Sin título",
         artist: item.artist || "conexionrock Music",
         description: item.description || "",
         type: item.type,
         cdo: item.cdo || "",
-        audio: item.audio_url,
+        audio: item.audio_url || "",
         cover:
           item.cover_url ||
           "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",
@@ -64,7 +65,7 @@ export default function PlaylistCdoPage({ params }: Props) {
     };
 
     loadPlaylist();
-  }, [params]);
+  }, [decodedCdo]);
 
   if (loading) {
     return (
@@ -99,7 +100,9 @@ export default function PlaylistCdoPage({ params }: Props) {
               Playlist CDO
             </p>
 
-            <h1 className="conexionrock-title uk-margin-remove">{cdoName}</h1>
+            <h1 className="conexionrock-title uk-margin-remove">
+              {decodedCdo}
+            </h1>
 
             <p className="conexionrock-muted uk-margin-small-top">
               Contenido disponible para este CDO.
