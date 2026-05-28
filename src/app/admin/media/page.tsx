@@ -7,16 +7,16 @@ import { isAdmin } from "@/lib/isAdmin";
 
 interface MediaItem {
   id: string;
-  title: string;
-  artist: string;
-  description: string;
+  title: string | null;
+  artist: string | null;
+  description: string | null;
   type: "song" | "podcast";
-  cdo: string;
-  audio_url: string;
-  cover_url: string;
-  is_featured_content: boolean;
-  featured_order: number;
-  featured_link: string;
+  cdo: string | null;
+  audio_url: string | null;
+  cover_url: string | null;
+  is_featured_content: boolean | null;
+  featured_order: number | null;
+  featured_link: string | null;
 }
 
 export default function AdminMediaPage() {
@@ -26,10 +26,12 @@ export default function AdminMediaPage() {
   const [allowed, setAllowed] = useState(false);
 
   const loadItems = async () => {
+    setLoading(true);
+
     const { data, error } = await supabase
       .from("media_items")
       .select(
-        "id,title,artist,description,type,cdo,audio_url,cover_url,is_featured_content,featured_order,featured_link",
+        "id,title,artist,description,type,cdo,audio_url,cover_url,is_featured_content,featured_order,featured_link"
       )
       .order("id", { ascending: false });
 
@@ -45,7 +47,17 @@ export default function AdminMediaPage() {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const allowedAdmin = await isAdmin();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        window.location.href = "/";
+        return;
+      }
+
+      const allowedAdmin = await isAdmin(user.id);
 
       if (!allowedAdmin) {
         window.location.href = "/";
@@ -62,10 +74,10 @@ export default function AdminMediaPage() {
   const updateItem = (
     id: string,
     field: keyof MediaItem,
-    value: string | boolean | number,
+    value: string | boolean | number
   ) => {
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      prev.map((item) => (item.id === id ? { ...item, [field]: value } : item))
     );
   };
 
@@ -78,12 +90,12 @@ export default function AdminMediaPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: item.title,
-        artist: item.artist,
-        description: item.description,
+        title: item.title || "",
+        artist: item.artist || "",
+        description: item.description || "",
         type: item.type,
-        cdo: item.cdo,
-        is_featured_content: item.is_featured_content,
+        cdo: item.cdo || "",
+        is_featured_content: !!item.is_featured_content,
         featured_order: item.featured_order || 0,
         featured_link: item.featured_link || "",
       }),
@@ -103,7 +115,7 @@ export default function AdminMediaPage() {
 
   const deleteItem = async (id: string) => {
     const confirmDelete = confirm(
-      "¿Seguro que quieres eliminar este contenido?",
+      "¿Seguro que quieres eliminar este contenido?"
     );
 
     if (!confirmDelete) return;
@@ -194,7 +206,7 @@ export default function AdminMediaPage() {
                     {item.cover_url ? (
                       <img
                         src={item.cover_url}
-                        alt={item.title}
+                        alt={item.title || "Portada"}
                         style={{
                           width: "72px",
                           height: "72px",
@@ -235,7 +247,7 @@ export default function AdminMediaPage() {
                         updateItem(
                           item.id,
                           "type",
-                          e.target.value as "song" | "podcast",
+                          e.target.value as "song" | "podcast"
                         )
                       }
                     >
@@ -290,7 +302,7 @@ export default function AdminMediaPage() {
                           updateItem(
                             item.id,
                             "is_featured_content",
-                            e.target.checked,
+                            e.target.checked
                           )
                         }
                       />
@@ -307,7 +319,7 @@ export default function AdminMediaPage() {
                         updateItem(
                           item.id,
                           "featured_order",
-                          Number(e.target.value),
+                          Number(e.target.value)
                         )
                       }
                       style={{ minWidth: "90px" }}
@@ -327,7 +339,11 @@ export default function AdminMediaPage() {
                   </td>
 
                   <td>
-                    <audio controls src={item.audio_url} />
+                    {item.audio_url ? (
+                      <audio controls src={item.audio_url} />
+                    ) : (
+                      <span className="conexionrock-muted">Sin audio</span>
+                    )}
                   </td>
 
                   <td>

@@ -1,5 +1,5 @@
 :root {
-  --conexionrock-green: #f60f0fd3;
+  --conexionrock-green: #2dc906d3;
   --conexionrock-green-hover: #bd1004fc;
   --conexionrock-orange: #ec05059e;
 
@@ -330,7 +330,7 @@ textarea {
   pointer-events: none;
 }
 
-.conexionrock-live-radio > * {
+.conexionrock-live-radio>* {
   position: relative;
   z-index: 1;
 }
@@ -422,6 +422,7 @@ textarea {
 }
 
 @keyframes conexionrockLivePulse {
+
   0%,
   100% {
     box-shadow: 0 0 0 5px rgba(255, 169, 30, 0.1);
@@ -753,7 +754,7 @@ textarea {
   pointer-events: none;
 }
 
-.conexionrock-player-inner > * {
+.conexionrock-player-inner>* {
   position: relative;
   z-index: 1;
 }
@@ -915,6 +916,7 @@ textarea {
 }
 
 @keyframes conexionrockEqualizer {
+
   0%,
   100% {
     height: 5px;
@@ -956,6 +958,7 @@ textarea {
 }
 
 @keyframes conexionrockCoverPulse {
+
   0%,
   100% {
     opacity: 0.45;
@@ -993,6 +996,7 @@ textarea {
 }
 
 @keyframes conexionrockMiniWave {
+
   0%,
   100% {
     height: 7px;
@@ -1394,6 +1398,7 @@ textarea {
     height: 94px;
   }
 }
+
 .conexionrock-featured-content-list {
   display: grid;
   gap: 12px;

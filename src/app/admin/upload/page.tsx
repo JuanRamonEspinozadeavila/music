@@ -22,7 +22,19 @@ export default function UploadMediaPage() {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const allowedAdmin = await isAdmin();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        window.location.href = "/";
+        return;
+      }
+
+      setUserId(user.id);
+
+      const allowedAdmin = await isAdmin(user.id);
 
       if (!allowedAdmin) {
         window.location.href = "/";
@@ -42,7 +54,7 @@ export default function UploadMediaPage() {
         return;
       }
 
-      if (!title || !type || !audioFile) {
+      if (!title.trim() || !type || !audioFile) {
         alert("Faltan campos obligatorios");
         return;
       }
@@ -50,9 +62,9 @@ export default function UploadMediaPage() {
       setLoading(true);
 
       const formData = new FormData();
-      formData.append("title", title);
-      formData.append("artist", artist);
-      formData.append("description", description);
+      formData.append("title", title.trim());
+      formData.append("artist", artist.trim());
+      formData.append("description", description.trim());
       formData.append("type", type);
       formData.append("cdo", cdo);
       formData.append("createdBy", userId);

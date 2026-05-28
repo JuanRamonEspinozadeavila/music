@@ -8,15 +8,33 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SongGrid } from "@/components/playlist/SongGrid";
 import { Song } from "@/types/song";
 
+interface FavoriteMediaItem {
+  id: string;
+  title: string | null;
+  artist: string | null;
+  description: string | null;
+  type: "song" | "podcast";
+  cdo: string | null;
+  audio_url: string | null;
+  cover_url: string | null;
+}
+
+interface FavoriteRow {
+  media_items: FavoriteMediaItem | FavoriteMediaItem[] | null;
+}
+
 export default function FavoritesPage() {
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadFavorites = async () => {
-      const { data: userData } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-      if (!userData.user) {
+      if (userError || !user) {
         window.location.href = "/login";
         return;
       }
@@ -35,9 +53,9 @@ export default function FavoritesPage() {
             audio_url,
             cover_url
           )
-        `,
+        `
         )
-        .eq("user_id", userData.user.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -47,17 +65,25 @@ export default function FavoritesPage() {
         return;
       }
 
-      const mappedSongs: Song[] = (data || [])
-        .map((favorite: any) => favorite.media_items)
-        .filter(Boolean)
-        .map((item: any) => ({
+      const rows = (data || []) as FavoriteRow[];
+
+      const mappedSongs: Song[] = rows
+        .map((favorite) => {
+          if (Array.isArray(favorite.media_items)) {
+            return favorite.media_items[0] || null;
+          }
+
+          return favorite.media_items;
+        })
+        .filter((item): item is FavoriteMediaItem => Boolean(item))
+        .map((item) => ({
           id: item.id,
-          title: item.title,
+          title: item.title || "Sin título",
           artist: item.artist || "conexionrock Music",
           description: item.description || "",
           type: item.type,
           cdo: item.cdo || "",
-          audio: item.audio_url,
+          audio: item.audio_url || "",
           cover:
             item.cover_url ||
             "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=800&auto=format&fit=crop",

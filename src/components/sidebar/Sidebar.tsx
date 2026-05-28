@@ -7,6 +7,7 @@ import { CDO_OPTIONS } from "@/types/cdo";
 import { LiveRadioPlayer } from "./LiveRadioPlayer";
 import { SponsorEventCard } from "./SponsorEventCard";
 import { isAdmin } from "@/lib/isAdmin";
+import { supabase } from "@/lib/supabase";
 
 const publicMenuItems = [
   { label: "Inicio", href: "/", icon: "⌂" },
@@ -28,7 +29,17 @@ export function Sidebar() {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const allowed = await isAdmin();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        setAllowedAdmin(false);
+        return;
+      }
+
+      const allowed = await isAdmin(user.id);
       setAllowedAdmin(allowed);
     };
 

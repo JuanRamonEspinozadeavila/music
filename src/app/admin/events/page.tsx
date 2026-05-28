@@ -30,10 +30,12 @@ export default function AdminEventsPage() {
   const [allowed, setAllowed] = useState(false);
 
   const loadItems = async () => {
+    setLoading(true);
+
     const { data, error } = await supabase
       .from("sponsors_events")
       .select(
-        "id, title, description, image_url, link_url, label, is_active, sort_order",
+        "id, title, description, image_url, link_url, label, is_active, sort_order"
       )
       .order("sort_order", { ascending: true });
 
@@ -49,7 +51,17 @@ export default function AdminEventsPage() {
 
   useEffect(() => {
     const checkAccess = async () => {
-      const allowedAdmin = await isAdmin();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        window.location.href = "/";
+        return;
+      }
+
+      const allowedAdmin = await isAdmin(user.id);
 
       if (!allowedAdmin) {
         window.location.href = "/";
@@ -270,6 +282,23 @@ export default function AdminEventsPage() {
                         <h3>{item.title}</h3>
 
                         <p>{item.description || "Sin descripción"}</p>
+
+                        {item.link_url && (
+                          <p>
+                            <a
+                              href={item.link_url}
+                              target={
+                                item.link_url.startsWith("http")
+                                  ? "_blank"
+                                  : "_self"
+                              }
+                              rel="noopener noreferrer"
+                              className="conexionrock-event-link"
+                            >
+                              Abrir link
+                            </a>
+                          </p>
+                        )}
 
                         <div className="conexionrock-admin-actions">
                           <button
