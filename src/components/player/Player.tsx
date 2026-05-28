@@ -58,7 +58,7 @@ export function Player() {
     return () => {
       window.removeEventListener(
         "conexionrock:pause-main-player",
-        pauseMainPlayer,
+        pauseMainPlayer
       );
     };
   }, [setIsPlaying]);
@@ -110,6 +110,11 @@ export function Player() {
 
     checkLiked();
   }, [currentSong, userId]);
+
+  useEffect(() => {
+    setCurrentTime(0);
+    setDuration(0);
+  }, [currentSong?.id]);
 
   const handleLike = async () => {
     if (!currentSong || !userId) {
@@ -232,8 +237,8 @@ export function Player() {
   };
 
   const controlButtonStyle = (active = false): React.CSSProperties => ({
-    width: "42px",
-    height: "42px",
+    width: "34px",
+    height: "34px",
     borderRadius: "50%",
     border: active
       ? "1px solid rgba(29,185,84,.65)"
@@ -244,26 +249,29 @@ export function Player() {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   });
-
-  useEffect(() => {
-    setCurrentTime(0);
-    setDuration(0);
-  }, [currentSong?.id]);
 
   if (!currentSong) return null;
 
   return (
-    <div className="conexionrock-player">
+    <div
+      className={`conexionrock-player ${isPlaying ? "conexionrock-player-compact" : ""
+        }`}
+    >
       <div
         className="conexionrock-player-inner"
         style={{
-          backgroundImage: `linear-gradient(90deg, rgba(10,10,10,0.96), rgba(10,10,10,0.88)), url(${currentSong.cover})`,
+          minHeight: isPlaying ? "48px" : "76px",
+          padding: isPlaying ? "5px 10px" : "10px 14px",
+          borderRadius: isPlaying ? "14px" : "22px",
+          backgroundImage: `linear-gradient(90deg, rgba(10,10,10,0.97), rgba(10,10,10,0.9)), url(${currentSong.cover})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          gap: isPlaying ? "8px" : "14px",
         }}
       >
-        <div className="conexionrock-player-song">
+        <div className="conexionrock-player-song" style={{ gap: "10px" }}>
           <div
             className={
               isPlaying
@@ -275,13 +283,43 @@ export function Player() {
               src={currentSong.cover}
               alt={currentSong.title}
               className="conexionrock-player-cover"
+              style={{
+                width: isPlaying ? "34px" : "52px",
+                height: isPlaying ? "34px" : "52px",
+                borderRadius: isPlaying ? "10px" : "14px",
+              }}
             />
           </div>
 
           <div style={{ minWidth: 0 }}>
-            <p className="conexionrock-player-title">{currentSong.title}</p>
+            <p
+              className="conexionrock-player-title"
+              style={{
+                fontSize: "14px",
+                marginBottom: "2px",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "260px",
+              }}
+            >
+              {currentSong.title}
+            </p>
+
             <div className="conexionrock-player-meta">
-              <p className="conexionrock-player-artist">{currentSong.artist}</p>
+              <p
+                className="conexionrock-player-artist"
+                style={{
+                  fontSize: "12px",
+                  margin: 0,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: "220px",
+                }}
+              >
+                {currentSong.artist}
+              </p>
 
               {isPlaying && (
                 <div
@@ -298,27 +336,15 @@ export function Player() {
           </div>
         </div>
 
-        <div className="conexionrock-player-center">
-          <div className="conexionrock-player-controls">
+        <div className="conexionrock-player-center" style={{ gap: "6px" }}>
+          <div className="conexionrock-player-controls" style={{ gap: "8px" }}>
             <button
               type="button"
               onClick={() => setShuffle(!shuffle)}
               style={controlButtonStyle(shuffle)}
             >
-              <Shuffle size={19} strokeWidth={2.4} />
+              <Shuffle size={16} strokeWidth={2.4} />
             </button>
-
-            <div
-              className={
-                isPlaying
-                  ? "conexionrock-mini-wave is-playing"
-                  : "conexionrock-mini-wave"
-              }
-            >
-              <span />
-              <span />
-              <span />
-            </div>
 
             <button
               type="button"
@@ -328,30 +354,25 @@ export function Player() {
                   ? "conexionrock-main-play is-playing"
                   : "conexionrock-main-play"
               }
+              style={{
+                width: isPlaying ? "30px" : "42px",
+                height: isPlaying ? "30px" : "42px",
+                minWidth: isPlaying ? "30px" : "42px",
+              }}
             >
               {isPlaying ? (
-                <Pause size={24} fill="currentColor" />
+                <Pause size={21} fill="currentColor" />
               ) : (
-                <Play size={24} fill="currentColor" style={{ marginLeft: 3 }} />
+                <Play size={21} fill="currentColor" style={{ marginLeft: 3 }} />
               )}
             </button>
-            <div
-              className={
-                isPlaying
-                  ? "conexionrock-mini-wave is-playing"
-                  : "conexionrock-mini-wave"
-              }
-            >
-              <span />
-              <span />
-              <span />
-            </div>
+
             <button
               type="button"
               onClick={handleNext}
               style={controlButtonStyle(false)}
             >
-              <SkipForward size={19} strokeWidth={2.4} />
+              <SkipForward size={16} strokeWidth={2.4} />
             </button>
 
             <button
@@ -359,7 +380,7 @@ export function Player() {
               onClick={() => setRepeat(!repeat)}
               style={controlButtonStyle(repeat)}
             >
-              <Repeat size={19} strokeWidth={2.4} />
+              <Repeat size={16} strokeWidth={2.4} />
             </button>
 
             <button
@@ -368,14 +389,20 @@ export function Player() {
               style={controlButtonStyle(liked)}
             >
               <Heart
-                size={19}
+                size={16}
                 strokeWidth={2.4}
                 fill={liked ? "currentColor" : "none"}
               />
             </button>
           </div>
 
-          <div className="conexionrock-progress-row">
+          <div
+            className="conexionrock-progress-row"
+            style={{
+              gap: "8px",
+              fontSize: "11px",
+            }}
+          >
             <span>{formatTime(currentTime)}</span>
 
             <input
@@ -392,16 +419,16 @@ export function Player() {
           </div>
         </div>
 
-        <div className="conexionrock-volume uk-visible@m">
+        <div className="conexionrock-volume uk-visible@m" style={{ gap: "8px" }}>
           <button
             type="button"
             onClick={toggleMute}
             style={controlButtonStyle(muted || volume === 0)}
           >
             {muted || volume === 0 ? (
-              <VolumeX size={19} strokeWidth={2.4} />
+              <VolumeX size={16} strokeWidth={2.4} />
             ) : (
-              <Volume2 size={19} strokeWidth={2.4} />
+              <Volume2 size={16} strokeWidth={2.4} />
             )}
           </button>
 
@@ -413,6 +440,7 @@ export function Player() {
             step={0.01}
             value={muted ? 0 : volume}
             onChange={handleVolume}
+            style={{ maxWidth: "90px" }}
           />
         </div>
 

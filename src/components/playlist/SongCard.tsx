@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Heart, Play } from "lucide-react";
+import { Heart, Pause, Play } from "lucide-react";
 import { Song } from "@/types/song";
 import { supabase } from "@/lib/supabase";
 import { usePlayerStore } from "@/store/playerStore";
@@ -12,6 +12,12 @@ interface Props {
 
 export function SongCard({ song }: Props) {
   const setSong = usePlayerStore((state) => state.setSong);
+  const currentSong = usePlayerStore((state) => state.currentSong);
+  const isPlaying = usePlayerStore((state) => state.isPlaying);
+  const setIsPlaying = usePlayerStore((state) => state.setIsPlaying);
+
+  const isCurrentSong = currentSong?.id === song.id;
+  const isPlayingThisSong = isCurrentSong && isPlaying;
 
   const [userId, setUserId] = useState("");
   const [liked, setLiked] = useState(false);
@@ -72,15 +78,21 @@ export function SongCard({ song }: Props) {
     setLiked(result.liked);
   };
 
-  const handlePlay = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handlePlay = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.stopPropagation();
+
+    if (isPlayingThisSong) {
+      setIsPlaying(false);
+      return;
+    }
+
     setSong(song);
   };
 
   return (
     <div
       className="conexionrock-song-card uk-position-relative"
-      onClick={() => setSong(song)}
+      onClick={() => handlePlay()}
     >
       <div className="conexionrock-song-cover-wrap">
         <img
@@ -111,9 +123,13 @@ export function SongCard({ song }: Props) {
           type="button"
           className="conexionrock-card-play"
           onClick={handlePlay}
-          aria-label="Reproducir"
+          aria-label={isPlayingThisSong ? "Pausar" : "Reproducir"}
         >
-          <Play size={28} fill="currentColor" />
+          {isPlayingThisSong ? (
+            <Pause size={28} fill="currentColor" />
+          ) : (
+            <Play size={28} fill="currentColor" />
+          )}
         </button>
       </div>
 
