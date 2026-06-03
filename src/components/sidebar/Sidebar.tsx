@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { CDO_OPTIONS } from "@/types/cdo";
+import { MUSIC_STYLE_OPTIONS } from "@/types/musicStyle";
 import { LiveRadioPlayer } from "./LiveRadioPlayer";
 import { SponsorEventCard } from "./SponsorEventCard";
 import { isAdmin } from "@/lib/isAdmin";
@@ -91,7 +91,7 @@ export function Sidebar() {
         <SponsorEventCard />
 
         <div className="conexionrock-cdo-card">
-          <p className="conexionrock-cdo-title">Playlists CDO</p>
+          <p className="conexionrock-cdo-title">Playlists </p>
 
           <select
             className="uk-select conexionrock-select"
@@ -100,12 +100,18 @@ export function Sidebar() {
             onChange={(e) => handleCdoChange(e.target.value)}
           >
             <option value="" disabled>
-              Selecciona un CDO
+              Selecciona
             </option>
 
-            {CDO_OPTIONS.map((cdo) => (
-              <option key={cdo} value={cdo}>
-                {cdo}
+
+
+            {MUSIC_STYLE_OPTIONS.map((style) => (
+  <option key={style} value={style}>
+    {style}
+  
+
+
+
               </option>
             ))}
           </select>

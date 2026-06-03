@@ -2,13 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { SongGrid } from "@/components/playlist/SongGrid";
 import { usePlayerStore } from "@/store/playerStore";
 import { getWeeklyFeatured } from "@/lib/getWeeklyFeatured";
 import { Song } from "@/types/song";
+import { getNews, NewsItem } from "@/lib/getNews";
+import { NewsFeed } from "@/components/news/NewsFeed";
+import { getEvents } from "@/lib/getEvents";
+import { EventFeed } from "@/components/events/EventFeed";
+import {
+  getEmergingBands,
+  EmergingBand,
+} from "@/lib/getEmergingBands";
 
 export default function HomePage() {
   const [name, setName] = useState("Invitado");
@@ -16,34 +23,39 @@ export default function HomePage() {
   const [cdo, setCdo] = useState("");
   const [loading, setLoading] = useState(true);
   const [weeklySongs, setWeeklySongs] = useState<Song[]>([]);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [emergingBands, setEmergingBands] = useState<EmergingBand[]>([]);
+  const [featuredBand, setFeaturedBand] = useState<EmergingBand | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const currentSong = usePlayerStore((state) => state.currentSong);
   const isPlaying = usePlayerStore((state) => state.isPlaying);
-
+    const [currentBand, setCurrentBand] = useState(0);
   useEffect(() => {
     const loadSession = async () => {
       const { data } = await supabase.auth.getUser();
+const latestNews = await getNews();
+setNews(latestNews);
+
+const eventItems = await getEvents();
+setEvents(eventItems);
+const bands = await getEmergingBands();
+setEmergingBands(bands);
 
       if (!data.user) {
-        setName("Invitado");
-        setEmail("");
-        setCdo("");
-        setIsLoggedIn(false);
+  setName("Invitado");
+  setEmail("");
+  setCdo("");
+  setIsLoggedIn(false);
 
-        const featured = await getWeeklyFeatured();
-        setWeeklySongs(featured);
+  const featured = await getWeeklyFeatured();
+  setWeeklySongs(featured);
 
-        setLoading(false);
-        return;
-      }
+  setLoading(false);
+  return;
+}
 
-      setIsLoggedIn(true);
-
-      const displayName =
-        data.user.user_metadata?.display_name ||
-        data.user.email?.split("@")[0] ||
-        "Usuario";
+setIsLoggedIn(true);
 
       setName(displayName);
       setEmail(data.user.email || "");
@@ -113,90 +125,205 @@ export default function HomePage() {
             <div className="conexionrock-hero-glow" />
 
             <div className="conexionrock-hero-layout">
+             
+             
+             
               <div className="conexionrock-hero-left">
-                <p className="conexionrock-eyebrow uk-margin-small-bottom">
-                  {currentSong
-                    ? isPlaying
-                      ? "REPRODUCIENDO AHORA"
-                      : "LISTO PARA ESCUCHAR"
-                    : "conexionrock MUSIC · MODO INVITADO"}
-                </p>
+  <p className="conexionrock-eyebrow uk-margin-small-bottom">
+    🔴 EN VIVO
+  </p>
 
-                <h1 className="conexionrock-hero-title uk-margin-remove">
-                  {currentSong
-                    ? currentSong.title
-                    : "Música independiente, podcasts y contenidos seleccionados."}
-                </h1>
+  <h1 className="conexionrock-hero-title uk-margin-remove">
+    Conexión Rock Radio
+  </h1>
 
-                <p className="conexionrock-hero-copy uk-margin-small-top">
-                  {currentSong
-                    ? `${currentSong.artist} · ${currentSong.cdo || "conexionrock Music"
-                    }`
-                    : isLoggedIn
-                      ? "Explora canciones, podcasts y contenidos seleccionados para tu CDO."
-                      : "Puedes escuchar como invitado. Para guardar favoritos necesitas iniciar sesión."}
-                </p>
+  <p className="conexionrock-hero-copy uk-margin-small-top">
+    Música independiente, noticias, podcasts, eventos y cobertura de la escena
+    musical en un solo lugar.
+  </p>
 
-                <div className="conexionrock-user-strip">
-                  {currentSong ? (
-                    <>
-                      <span>{currentSong.type || "Contenido"}</span>
-                      {currentSong.cdo && <span>CDO: {currentSong.cdo}</span>}
-                      <span>{isPlaying ? "En reproducción" : "Pausado"}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>{name}</span>
-                      {email && <span>{email}</span>}
-                      {cdo && <span>CDO: {cdo}</span>}
-                    </>
-                  )}
-                </div>
+  <div className="conexionrock-user-strip">
+    <span>Radio</span>
+    <span>Noticias</span>
+    <span>Podcasts</span>
+    <span>Eventos</span>
+  </div>
 
-                <div className="conexionrock-hero-actions conexionrock-hero-actions-bottom">
-                  <a href="/search" className="conexionrock-pill-button">
-                    Buscar contenido
-                  </a>
+  <div className="conexionrock-hero-actions conexionrock-hero-actions-bottom">
+    <button
+      type="button"
+      className="conexionrock-pill-button"
+      onClick={() => {
+        const radio = document.querySelector("audio");
+        if (radio) {
+          (radio as HTMLAudioElement).play();
+        }
+      }}
+    >
+      Escuchar ahora
+    </button>
 
-                  <button
-                    type="button"
-                    onClick={handleAuthAction}
-                    className="conexionrock-ghost-button"
-                  >
-                    {isLoggedIn ? "Cerrar sesión" : "Iniciar sesión"}
-                  </button>
-                </div>
-              </div>
+    <a href="/events" className="conexionrock-ghost-button">
+      Ver eventos
+    </a>
+  </div>
+  
+<div className="conexionrock-news-grid-hero">
+  {news.slice(0, 4).map((item) => (
+    <a
+      key={item.id}
+      href={item.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="conexionrock-news-strip-item"
+    >
+      <img
+        src={item.image}
+        alt={item.title}
+        className="conexionrock-news-strip-image"
+      />
 
-              <aside className="conexionrock-weekly-feature">
-                <p className="conexionrock-weekly-kicker">
-                  Contenido destacado
-                </p>
+      <span>{item.title}</span>
+    </a>
+  ))}
+</div>
 
-                {weeklySongs.length > 0 ? (
-                  <div className="conexionrock-featured-content-list">
-                    {weeklySongs.map((song) => (
-                      <button
-                        key={song.id}
-                        type="button"
-                        className="conexionrock-featured-content-card"
-                        onClick={() => usePlayerStore.getState().setSong(song)}
-                      >
-                        <img src={song.cover} alt={song.title} />
-                        <strong>{song.title}</strong>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p>Todavía no hay contenido destacado.</p>
-                )}
-              </aside>
+
+
+
+
+</div>
+
+
+
+
+
+           <aside className="conexionrock-weekly-feature">
+          
+  {emergingBands.length > 0 && (
+    <a
+      href={emergingBands[currentBand].link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="conexionrock-emerging-card"
+    >
+      <p className="conexionrock-weekly-kicker">
+        🎸 MÚSICA NUEVA
+      </p>
+
+      <img
+        src={emergingBands[currentBand].image}
+        alt={emergingBands[currentBand].title}
+        className="conexionrock-emerging-image"
+      />
+
+      <h3>{emergingBands[currentBand].title}</h3>
+
+      <p>
+        {emergingBands[currentBand].excerpt.substring(0, 120)}
+      </p>
+
+
+
+<div className="conexionrock-slider-controls">
+  <button
+    onClick={() =>
+      setCurrentBand(
+        currentBand === 0
+          ? emergingBands.length - 1
+          : currentBand - 1
+      )
+    }
+  >
+    ◀
+  </button>
+
+  <span>
+    {currentBand + 1} / {emergingBands.length}
+  </span>
+
+  <button
+    onClick={() =>
+      setCurrentBand(
+        currentBand === emergingBands.length - 1
+          ? 0
+          : currentBand + 1
+      )
+    }
+  >
+    ▶
+  </button>
+</div>
+
+
+    </a>
+
+
+
+
+  )}
+</aside>
             </div>
-          </section>
 
-          <Header />
 
-          <section className="uk-margin-small-top">
+
+
+
+
+
+
+
+        </section>
+
+
+<Header />
+ 
+
+
+
+
+<section className="uk-margin-large-top">
+  <div className="conexionrock-section-heading">
+    <div>
+      <p className="conexionrock-eyebrow uk-margin-remove">
+        PRÓXIMOS EVENTOS
+      </p>
+
+      <h2 className="conexionrock-section-title uk-margin-remove">
+        Agenda y conciertos
+      </h2>
+      <EventFeed events={events} />
+    </div>
+  </div>
+
+
+</section>
+
+
+<section className="uk-margin-large-top">
+  <div className="conexionrock-section-heading">
+    <div>
+      <p className="conexionrock-eyebrow uk-margin-remove">
+        NUEVAS PROPUESTAS
+      </p>
+
+      <h2 className="conexionrock-section-title uk-margin-remove">
+        Bandas emergentes
+      </h2>
+    </div>
+  </div>
+
+  <SongGrid songs={weeklySongs} />
+</section>
+
+
+
+
+
+
+<NewsFeed news={news} />
+
+<section className="uk-margin-large-top">
             <div className="conexionrock-section-heading">
               <div>
                 <p className="conexionrock-eyebrow uk-margin-remove">

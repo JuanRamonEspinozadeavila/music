@@ -15,16 +15,7 @@ export function Header() {
 
   return (
     <header style={{ padding: "10px 0" }}>
-      <h2
-        style={{
-          fontSize: "26px",
-          fontWeight: 400,
-          margin: 0,
-          color: "#fff",
-        }}
-      >
-        Propotipo 2026
-      </h2>
+      
 
     
     </header>
