@@ -18,7 +18,7 @@ export function NewsFeed({ news }: Props) {
           </p>
 
           <h2 className="conexionrock-section-title uk-margin-remove">
-          Noticias y cobertura
+            Noticias y cobertura
           </h2>
         </div>
       </div>

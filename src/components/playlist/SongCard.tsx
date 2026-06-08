@@ -137,7 +137,9 @@ export function SongCard({ song }: Props) {
         <h3>{song.title}</h3>
         <p>{song.artist}</p>
 
-        {song.cdo && <span className="conexionrock-song-cdo">{song.cdo}</span>}
+        <span className="conexionrock-editor-pick" style={{ fontSize: 10 }} >
+          ★ Selección del editor
+        </span>
       </div>
     </div>
   );
