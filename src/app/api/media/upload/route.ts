@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
 export async function POST(request: NextRequest) {
+
+  console.log(
+    "SERVICE ROLE EXISTS:",
+    !!process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  console.log(
+    "SERVICE ROLE LENGTH:",
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.length
+  );
+
+
+
   try {
     const formData = await request.formData();
 
