@@ -5,17 +5,15 @@ export interface Cdo {
 }
 
 export const CDO_OPTIONS: string[] = [
-  "Corporativo Santa Fe",
-  "Aguascalientes",
-  "Celaya",
-  "Coacalco",
-  "Ganaderos",
-  "Guadalajara",
-  "Ladoga",
-  "Pantitlán",
-  "Puebla",
-  "Querétaro",
-  "Texcoco",
-  "Toluca",
-
+  "Música Nueva",
+  "Rock Alternativo",
+  "Rock Mexicano",
+  "Indie",
+  "Metal",
+  "Punk",
+  "Rock Clásico",
+  "Sesión en Vivo",
+  "Podcast",
+  "Entrevista"
 ];
+

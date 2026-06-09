@@ -182,7 +182,7 @@ export default function UploadMediaPage() {
 
         <div className="uk-margin">
           <label className="uk-form-label conexionrock-muted">
-            CDO / Playlist
+            Categoría Musical
           </label>
           <select
             className="uk-select conexionrock-select"

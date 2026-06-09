@@ -91,7 +91,8 @@ export async function POST(request: NextRequest) {
       })
       .select()
       .single();
-
+    console.log("INSERT DATA:", data);
+    console.log("INSERT ERROR:", error);
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }

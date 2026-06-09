@@ -11,16 +11,14 @@ import { supabase } from "@/lib/supabase";
 
 const publicMenuItems = [
   { label: "Inicio", href: "/", icon: "⌂" },
-  { label: "Buscar", href: "/search", icon: "⌕" },
-  { label: "Tu biblioteca", href: "/library", icon: "▣" },
-  { label: "Favoritos", href: "/favorites", icon: "♡" },
+  { label: "Explorar", href: "/search", icon: "⌕" },
   { label: "Eventos", href: "/events", icon: "◉" },
 ];
 
 const adminMenuItems = [
-  { label: "Subir contenido", href: "/admin/upload", icon: "＋" },
-  { label: "Administrar", href: "/admin/media", icon: "✎" },
-  { label: "Admin eventos", href: "/admin/events", icon: "✦" },
+  { label: "Subir", href: "/admin/upload", icon: "＋" },
+  { label: "Contenido", href: "/admin/media", icon: "✎" },
+  { label: "Eventos", href: "/admin/events", icon: "✦" },
 ];
 
 export function Sidebar() {
@@ -50,8 +48,9 @@ export function Sidebar() {
     ? [...publicMenuItems, ...adminMenuItems]
     : publicMenuItems;
 
-  const handleCdoChange = (value: string) => {
+  const handleCategoryChange = (value: string) => {
     if (!value) return;
+
     router.push(`/playlist/${encodeURIComponent(value)}`);
   };
 
@@ -61,7 +60,7 @@ export function Sidebar() {
         <Link href="/" className="conexionrock-brand-card">
           <img
             src="/LogoCR.webp"
-            alt="Logo Radioconexionrock"
+            alt="Logo Conexion Rock"
             className="conexionrock-brand-logo"
           />
 
@@ -78,8 +77,14 @@ export function Sidebar() {
           <ul className="uk-nav uk-nav-default">
             {menuItems.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="conexionrock-sidebar-link">
-                  <span className="conexionrock-sidebar-icon">{item.icon}</span>
+                <Link
+                  href={item.href}
+                  className="conexionrock-sidebar-link"
+                >
+                  <span className="conexionrock-sidebar-icon">
+                    {item.icon}
+                  </span>
+
                   <span>{item.label}</span>
                 </Link>
               </li>
@@ -88,30 +93,29 @@ export function Sidebar() {
         </nav>
 
         <LiveRadioPlayer />
+
         <SponsorEventCard />
 
         <div className="conexionrock-cdo-card">
-          <p className="conexionrock-cdo-title">Playlists </p>
+          <p className="conexionrock-cdo-title">
+            Categorías
+          </p>
 
           <select
             className="uk-select conexionrock-select"
-            aria-label="CDO"
+            aria-label="Categorías"
             defaultValue=""
-            onChange={(e) => handleCdoChange(e.target.value)}
+            onChange={(e) =>
+              handleCategoryChange(e.target.value)
+            }
           >
             <option value="" disabled>
-              Selecciona
+              Explorar categoría
             </option>
 
-
-
             {MUSIC_STYLE_OPTIONS.map((style) => (
-  <option key={style} value={style}>
-    {style}
-  
-
-
-
+              <option key={style} value={style}>
+                {style}
               </option>
             ))}
           </select>
